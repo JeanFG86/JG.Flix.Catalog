@@ -21,4 +21,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\JG.Flix.Catalog.Domain\JG.Flix.Catalog.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

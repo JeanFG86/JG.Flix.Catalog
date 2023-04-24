@@ -1,5 +1,6 @@
 ﻿using Xunit;
-
+using DomainEntity = JG.Flix.Catalog.Domain.Entity;
+    
 namespace JG.Flix.Catalog.UnitTests.Domain.Entity.Category;
 
 public class CategoryTest
@@ -16,7 +17,7 @@ public class CategoryTest
         };
 
         //Act
-        var category = new Category(validData.Name, validData.Description);
+        var category = new DomainEntity.Category(validData.Name, validData.Description);
 
         //Assert
         Assert.NotNull(category);
