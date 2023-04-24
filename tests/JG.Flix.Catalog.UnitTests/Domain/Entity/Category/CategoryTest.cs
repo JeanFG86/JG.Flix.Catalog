@@ -9,20 +9,24 @@ public class CategoryTest
     [Trait("Domain", "Category - Aggregates")]
     public void Instantiate()
     {
-        //Arange
         var validData = new
         {
             Name = "category name",
             Description = "category description",
         };
-
-        //Act
+        var datetimeBefore = DateTime.Now;
+        
         var category = new DomainEntity.Category(validData.Name, validData.Description);
+        var datetimeAfter = DateTime.Now;
 
-        //Assert
         Assert.NotNull(category);
         Assert.Equal(validData.Name, category.Name);
         Assert.Equal(validData.Description, category.Description);
+        Assert.NotEqual(default(Guid), category.Id);
+        Assert.NotEqual(default(DateTime), category.CreatedAt);
+        Assert.True(category.CreatedAt > datetimeBefore);
+        Assert.True(category.CreatedAt < datetimeAfter);
+        Assert.True(category.IsActive);
     }
 }
 
