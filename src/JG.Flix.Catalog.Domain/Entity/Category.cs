@@ -25,5 +25,8 @@ public class Category
     {
         if (string.IsNullOrWhiteSpace(Name))
             throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
+
+        if(Description == null)
+            throw new EntityValidationException($"{nameof(Description)} should not be null");
     }
 }
