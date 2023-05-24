@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using JG.Flix.Catalog.Domain.Exceptions;
+using Xunit;
 using DomainEntity = JG.Flix.Catalog.Domain.Entity;
     
 namespace JG.Flix.Catalog.UnitTests.Domain.Entity.Category;
@@ -53,6 +54,18 @@ public class CategoryTest
         Assert.True(category.CreatedAt > datetimeBefore);
         Assert.True(category.CreatedAt < datetimeAfter);
         Assert.Equal(isActive, category.IsActive);
+    }
+
+    [Theory(DisplayName = nameof(InstantieteErrorWhenNameIsEmpty))]
+    [Trait("Domain", "Category - Aggregates")]
+    [InlineData("")]    
+    [InlineData(null)]    
+    [InlineData(" ")]    
+    public void InstantieteErrorWhenNameIsEmpty(string? name)
+    {
+        Action action = () => new DomainEntity.Category(name!, "Category Description");
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Name should not be empty or null", exception.Message);
     }
 }
 
