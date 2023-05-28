@@ -76,5 +76,18 @@ public class CategoryTest
         var exception = Assert.Throws<EntityValidationException>(action);
         Assert.Equal("Description should not be null", exception.Message);
     }
+
+    [Theory(DisplayName = nameof(InstantiateErrorWhenNameLessThan3Characters))]
+    [Trait("Domain", "Category - Aggregates")]
+    [InlineData("1")]
+    [InlineData("12")]
+    [InlineData("a")]
+    [InlineData("ca")]
+    public void InstantiateErrorWhenNameLessThan3Characters(string invalidName)
+    {
+        Action action = () => new DomainEntity.Category(invalidName, "Category ok Description");
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Name should be at least 3 characteres long", exception.Message);
+    }
 }
 
