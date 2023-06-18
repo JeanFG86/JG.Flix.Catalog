@@ -210,7 +210,7 @@ public class CategoryTest
         var validCategory = _categoryTestFixture.GetValueCategory();
         var currentDescription = validCategory.Description;
 
-        var invalidName = String.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
+        var invalidName = _categoryTestFixture.Faker.Lorem.Letter(256);
         Action action = () => validCategory.Update(invalidName);
 
         action.Should().Throw<EntityValidationException>().WithMessage("Name should be less or equal 255 characteres long");
@@ -222,7 +222,11 @@ public class CategoryTest
     {
         var validCategory = _categoryTestFixture.GetValueCategory();
 
-        var invalidDescription = String.Join(null, Enumerable.Range(1, 10001).Select(_ => "a").ToArray());
+        var invalidDescription = _categoryTestFixture.Faker.Commerce.ProductDescription();
+        while (invalidDescription.Length <= 10_000)
+        {
+            invalidDescription = $"{invalidDescription} {_categoryTestFixture.Faker.Commerce.ProductDescription()}";
+        }
         Action action = () => validCategory.Update(validCategory.Name, invalidDescription);
 
         action.Should().Throw<EntityValidationException>().WithMessage("Description should be less or equal 10_000 characteres long");
