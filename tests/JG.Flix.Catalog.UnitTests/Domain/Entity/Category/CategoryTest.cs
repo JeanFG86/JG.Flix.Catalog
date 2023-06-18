@@ -150,12 +150,12 @@ public class CategoryTest
     public void Update()
     {
         var validCategory = _categoryTestFixture.GetValueCategory();
-        var newValues = new { Name = "New Name", Description = "New Description" };
+        var categoryWithnewValues = _categoryTestFixture.GetValueCategory();
 
-        validCategory.Update(newValues.Name, newValues.Description);
+        validCategory.Update(categoryWithnewValues.Name, categoryWithnewValues.Description);
 
-        validCategory.Name.Should().Be(newValues.Name);
-        validCategory.Description.Should().Be(newValues.Description);
+        validCategory.Name.Should().Be(categoryWithnewValues.Name);
+        validCategory.Description.Should().Be(categoryWithnewValues.Description);
     }
 
     [Fact(DisplayName = nameof(UpdateOnlyName))]
@@ -163,12 +163,12 @@ public class CategoryTest
     public void UpdateOnlyName()
     {
         var validCategory = _categoryTestFixture.GetValueCategory();
-        var newValues = new { Name = "New Name" };
+        var newName = _categoryTestFixture.GetValidCategoryName();
         var currentDescription = validCategory.Description;
 
-        validCategory.Update(newValues.Name);
+        validCategory.Update(newName);
 
-        validCategory.Name.Should().Be(newValues.Name);
+        validCategory.Name.Should().Be(newName);
         validCategory.Description.Should().Be(currentDescription);
     }
 
@@ -180,7 +180,6 @@ public class CategoryTest
     public void UpdateErrorWhenNameIsEmpty(string? name)
     {
         var validCategory = _categoryTestFixture.GetValueCategory();
-        var newValues = new { Name = "New Name" };
         var currentDescription = validCategory.Description;
 
         Action action = () => validCategory.Update(name!);
@@ -197,7 +196,6 @@ public class CategoryTest
     public void UpdateErrorWhenNameLessThan3Characters(string invalidName)
     {
         var validCategory = _categoryTestFixture.GetValueCategory();
-        var newValues = new { Name = "New Name" };
         var currentDescription = validCategory.Description;
 
         Action action = () => validCategory.Update(invalidName);
@@ -210,7 +208,6 @@ public class CategoryTest
     public void UpdateErrorWhenNameIsGreater255Characters()
     {
         var validCategory = _categoryTestFixture.GetValueCategory();
-        var newValues = new { Name = "New Name" };
         var currentDescription = validCategory.Description;
 
         var invalidName = String.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
