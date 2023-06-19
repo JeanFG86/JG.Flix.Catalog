@@ -22,7 +22,7 @@ public class DomainValidationTest
     [Trait("Domain", "DomainValidation - Validation")]
     public void NotNullThrowWhenNull()
     {
-        string value = null;
+        string? value = null;
         Action action = () => DomainValidation.NotNull(value, "FieldName");
         action.Should().Throw<EntityValidationException>().WithMessage("FieldName should not be null");
     }
