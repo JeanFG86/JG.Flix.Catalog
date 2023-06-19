@@ -15,6 +15,19 @@ public class CategoryTest
         this._categoryTestFixture = categoryTestFixture;
     }
 
+    public static IEnumerable<object[]> GetNameLessThan3Characters(int numberOfTests = 6)
+    {
+        var fixture = new CategoryTestFixture();
+        for (int i = 0; i < numberOfTests; i++)
+        {
+            var isOdd = 1 % 2 == 1;
+            yield return new object[]
+            {
+                fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)]
+            };
+        }
+    }
+
     [Fact(DisplayName = nameof(Instantiate))]
     [Trait("Domain", "Category - Aggregates")]
     public void Instantiate()
@@ -80,14 +93,11 @@ public class CategoryTest
         Action action = () => new DomainEntity.Category(validCategory.Name, null!);
 
         action.Should().Throw<EntityValidationException>().WithMessage("Description should not be null");
-    }
+    }    
 
     [Theory(DisplayName = nameof(InstantiateErrorWhenNameLessThan3Characters))]
     [Trait("Domain", "Category - Aggregates")]
-    [InlineData("1")]
-    [InlineData("12")]
-    [InlineData("a")]
-    [InlineData("ca")]
+    [MemberData(nameof(GetNameLessThan3Characters), parameters: 10)]
     public void InstantiateErrorWhenNameLessThan3Characters(string invalidName)
     {
         var validCategory = _categoryTestFixture.GetValueCategory();
@@ -189,10 +199,7 @@ public class CategoryTest
 
     [Theory(DisplayName = nameof(UpdateErrorWhenNameLessThan3Characters))]
     [Trait("Domain", "Category - Aggregates")]
-    [InlineData("1")]
-    [InlineData("12")]
-    [InlineData("a")]
-    [InlineData("ca")]
+    [MemberData(nameof(GetNameLessThan3Characters), parameters: 10)]
     public void UpdateErrorWhenNameLessThan3Characters(string invalidName)
     {
         var validCategory = _categoryTestFixture.GetValueCategory();
