@@ -124,7 +124,7 @@ public class DomainValidationTest
         action.Should().Throw<EntityValidationException>().WithMessage($"fieldName should not be less than {minLength}");
     }
 
-    [Theory(DisplayName = nameof(GetValuesGreaterThanMin))]
+    [Theory(DisplayName = nameof(MinLengthOk))]
     [Trait("Domain", "DomainValidation - Validation")]
     [MemberData(nameof(GetValuesGreaterThanMin), parameters: 10)]
     public void MinLengthOk(string target, int minLength)
@@ -144,10 +144,10 @@ public class DomainValidationTest
         action.Should().Throw<EntityValidationException>().WithMessage($"fieldName should not be greater than {maxLength}");
     }
 
-    [Theory(DisplayName = nameof(GetValuesGreaterThanMin))]
+    [Theory(DisplayName = nameof(MaxLengthOk))]
     [Trait("Domain", "DomainValidation - Validation")]
     [MemberData(nameof(GetValuesLessThanMax), parameters: 10)]
-    public void MmaxLengthOk(string target, int maxLength)
+    public void MaxLengthOk(string target, int maxLength)
     {
         Action action = () => DomainValidation.MaxLength(target, maxLength, "fieldName");
 
