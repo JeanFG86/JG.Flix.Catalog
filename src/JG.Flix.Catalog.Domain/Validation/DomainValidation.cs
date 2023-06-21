@@ -27,4 +27,12 @@ public class DomainValidation
             throw new EntityValidationException($"{fieldName} should not be less than {minLength}");
         }
     }
+
+    public static void MaxLength(string? target, int maxLength, string fieldName)
+    {
+        if (target.Length > maxLength)
+        {
+            throw new EntityValidationException($"{fieldName} should not be greater than {maxLength}");
+        }
+    }
 }

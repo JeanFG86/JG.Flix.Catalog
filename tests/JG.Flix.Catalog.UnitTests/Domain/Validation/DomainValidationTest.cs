@@ -39,6 +39,21 @@ public class DomainValidationTest
         }
     }
 
+    public static IEnumerable<object[]> GetValuesGreaterThanMax(int numberOfTests = 5)
+    {
+        yield return new object[] { "123456", 5 };
+        var faker = new Faker();
+        for (int i = 0; i < numberOfTests; i++)
+        {
+            var exemple = faker.Commerce.ProductName();
+            var maxLength = exemple.Length - (new Random().Next(1, 5));
+            yield return new object[]
+            {
+                exemple, maxLength
+            };
+        }
+    }
+
     [Fact(DisplayName = nameof(NotNullOk))]
     [Trait("Domain", "DomainValidation - Validation")]
     public void NotNullOk()
@@ -84,7 +99,7 @@ public class DomainValidationTest
         action.Should().NotThrow();
     }
 
-    [Theory(DisplayName = nameof(NotNullOrEmptyThrowWhenEmpty))]
+    [Theory(DisplayName = nameof(MinLengthThrowWhenLess))]
     [Trait("Domain", "DomainValidation - Validation")]
     [MemberData(nameof(GetValuesLessThanMin), parameters: 10)]
     public void MinLengthThrowWhenLess(string target, int minLength)
@@ -94,7 +109,7 @@ public class DomainValidationTest
         action.Should().Throw<EntityValidationException>().WithMessage($"fieldName should not be less than {minLength}");
     }
 
-    [Theory(DisplayName = nameof(NotNullOrEmptyThrowWhenEmpty))]
+    [Theory(DisplayName = nameof(GetValuesGreaterThanMin))]
     [Trait("Domain", "DomainValidation - Validation")]
     [MemberData(nameof(GetValuesGreaterThanMin), parameters: 10)]
     public void MinLengthOk(string target, int minLength)
@@ -102,5 +117,15 @@ public class DomainValidationTest
         Action action = () => DomainValidation.MinLength(target, minLength, "fieldName");
 
         action.Should().NotThrow();
+    }
+
+    [Theory(DisplayName = nameof(MaxLengthThrowWhenGreater))]
+    [Trait("Domain", "DomainValidation - Validation")]
+    [MemberData(nameof(GetValuesGreaterThanMax), parameters: 10)]
+    public void MaxLengthThrowWhenGreater(string target, int maxLength)
+    {
+        Action action = () => DomainValidation.MaxLength(target, maxLength, "fieldName");
+
+        action.Should().Throw<EntityValidationException>().WithMessage($"fieldName should not be greater than {maxLength}");
     }
 }
