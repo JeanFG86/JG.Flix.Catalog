@@ -54,6 +54,21 @@ public class DomainValidationTest
         }
     }
 
+    public static IEnumerable<object[]> GetValuesLessThanMax(int numberOfTests = 5)
+    {
+        yield return new object[] { "123456", 7 };
+        var faker = new Faker();
+        for (int i = 0; i < numberOfTests; i++)
+        {
+            var exemple = faker.Commerce.ProductName();
+            var maxLength = exemple.Length + (new Random().Next(1, 15));
+            yield return new object[]
+            {
+                exemple, maxLength
+            };
+        }
+    }
+
     [Fact(DisplayName = nameof(NotNullOk))]
     [Trait("Domain", "DomainValidation - Validation")]
     public void NotNullOk()
@@ -127,5 +142,15 @@ public class DomainValidationTest
         Action action = () => DomainValidation.MaxLength(target, maxLength, "fieldName");
 
         action.Should().Throw<EntityValidationException>().WithMessage($"fieldName should not be greater than {maxLength}");
+    }
+
+    [Theory(DisplayName = nameof(GetValuesGreaterThanMin))]
+    [Trait("Domain", "DomainValidation - Validation")]
+    [MemberData(nameof(GetValuesLessThanMax), parameters: 10)]
+    public void MmaxLengthOk(string target, int maxLength)
+    {
+        Action action = () => DomainValidation.MaxLength(target, maxLength, "fieldName");
+
+        action.Should().NotThrow();
     }
 }
