@@ -1,6 +1,7 @@
 ﻿
 using JG.Flix.Catalog.Domain.Exceptions;
 using JG.Flix.Catalog.Domain.SeedWork;
+using JG.Flix.Catalog.Domain.Validation;
 
 namespace JG.Flix.Catalog.Domain.Entity;
 public class Category : AggregateRoot
@@ -42,19 +43,14 @@ public class Category : AggregateRoot
 
     private void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Name))
-            throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
+        DomainValidation.NotNullOrEmpty(Name, nameof(Name));
 
-        if (Name.Length < 3)
-            throw new EntityValidationException($"{nameof(Name)} should be at least 3 characteres long");
+        DomainValidation.MinLength(Name, 3, nameof(Name));
 
-        if (Name.Length > 255)
-            throw new EntityValidationException($"{nameof(Name)} should be less or equal 255 characteres long");        
+        DomainValidation.MaxLength(Name, 255, nameof(Name));    
 
-        if (Description == null)
-            throw new EntityValidationException($"{nameof(Description)} should not be null");
+        DomainValidation.NotNull(Description, nameof(Description));
 
-        if (Description.Length > 10000)
-            throw new EntityValidationException($"{nameof(Description)} should be less or equal 10_000 characteres long");
+        DomainValidation.MaxLength(Description, 10000, nameof(Description));
     }
 }
