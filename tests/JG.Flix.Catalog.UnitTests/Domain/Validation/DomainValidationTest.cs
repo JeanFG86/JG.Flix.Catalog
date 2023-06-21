@@ -85,10 +85,11 @@ public class DomainValidationTest
     public void NotNullThrowWhenNull()
     {
         string? value = null;
+        string filedName = Faker.Database.Column();
 
-        Action action = () => DomainValidation.NotNull(value, "FieldName");
+        Action action = () => DomainValidation.NotNull(value, filedName);
 
-        action.Should().Throw<EntityValidationException>().WithMessage("FieldName should not be null");
+        action.Should().Throw<EntityValidationException>().WithMessage($"{filedName} should not be null");
     }
 
     [Theory(DisplayName = nameof(NotNullOrEmptyThrowWhenEmpty))]
@@ -98,9 +99,11 @@ public class DomainValidationTest
     [InlineData(null)]
     public void NotNullOrEmptyThrowWhenEmpty(string? target)
     {
-        Action action = () => DomainValidation.NotNullOrEmpty(target, "fieldName");
+        string filedName = Faker.Database.Column();
 
-        action.Should().Throw<EntityValidationException>().WithMessage("fieldName should not be null or empty");
+        Action action = () => DomainValidation.NotNullOrEmpty(target, filedName);
+
+        action.Should().Throw<EntityValidationException>().WithMessage($"{filedName} should not be null or empty");
     }
 
     [Fact(DisplayName = nameof(NotNullOrEmptyOk))]
@@ -108,8 +111,9 @@ public class DomainValidationTest
     public void NotNullOrEmptyOk()
     {
         string target = Faker.Commerce.ProductName();
+        string filedName = Faker.Database.Column();
 
-        Action action = () => DomainValidation.NotNullOrEmpty(target, "fieldName");
+        Action action = () => DomainValidation.NotNullOrEmpty(target, filedName);
 
         action.Should().NotThrow();
     }
@@ -119,9 +123,11 @@ public class DomainValidationTest
     [MemberData(nameof(GetValuesLessThanMin), parameters: 10)]
     public void MinLengthThrowWhenLess(string target, int minLength)
     {
-        Action action = () => DomainValidation.MinLength(target, minLength, "fieldName");
+        string fieldName = Faker.Database.Column();
 
-        action.Should().Throw<EntityValidationException>().WithMessage($"fieldName should not be less than {minLength}");
+        Action action = () => DomainValidation.MinLength(target, minLength, fieldName);
+
+        action.Should().Throw<EntityValidationException>().WithMessage($"{fieldName} should not be less than {minLength}");
     }
 
     [Theory(DisplayName = nameof(MinLengthOk))]
@@ -129,7 +135,9 @@ public class DomainValidationTest
     [MemberData(nameof(GetValuesGreaterThanMin), parameters: 10)]
     public void MinLengthOk(string target, int minLength)
     {
-        Action action = () => DomainValidation.MinLength(target, minLength, "fieldName");
+        string fieldName = Faker.Database.Column();
+
+        Action action = () => DomainValidation.MinLength(target, minLength, fieldName);
 
         action.Should().NotThrow();
     }
@@ -139,9 +147,11 @@ public class DomainValidationTest
     [MemberData(nameof(GetValuesGreaterThanMax), parameters: 10)]
     public void MaxLengthThrowWhenGreater(string target, int maxLength)
     {
-        Action action = () => DomainValidation.MaxLength(target, maxLength, "fieldName");
+        string fieldName = Faker.Database.Column();
 
-        action.Should().Throw<EntityValidationException>().WithMessage($"fieldName should not be greater than {maxLength}");
+        Action action = () => DomainValidation.MaxLength(target, maxLength, fieldName);
+
+        action.Should().Throw<EntityValidationException>().WithMessage($"{fieldName} should not be greater than {maxLength}");
     }
 
     [Theory(DisplayName = nameof(MaxLengthOk))]
@@ -149,7 +159,9 @@ public class DomainValidationTest
     [MemberData(nameof(GetValuesLessThanMax), parameters: 10)]
     public void MaxLengthOk(string target, int maxLength)
     {
-        Action action = () => DomainValidation.MaxLength(target, maxLength, "fieldName");
+        string fieldName = Faker.Database.Column();
+
+        Action action = () => DomainValidation.MaxLength(target, maxLength, fieldName);
 
         action.Should().NotThrow();
     }
