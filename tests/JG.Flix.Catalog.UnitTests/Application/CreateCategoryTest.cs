@@ -1,4 +1,5 @@
-﻿using JG.Flix.Catalog.Domain.Entity;
+﻿using JG.Flix.Catalog.Application.Interfaces;
+using JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Repository;
 using Moq;
 using Xunit;
