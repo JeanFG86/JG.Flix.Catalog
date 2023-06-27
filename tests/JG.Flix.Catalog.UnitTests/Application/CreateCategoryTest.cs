@@ -1,4 +1,5 @@
-﻿using JG.Flix.Catalog.Application.Interfaces;
+﻿using FluentAssertions;
+using JG.Flix.Catalog.Application.Interfaces;
 using JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Repository;
 using Moq;
@@ -16,8 +17,8 @@ public class CreateCategoryTest
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
         var input = new UseCases.CreateCategoryInput(
-            "category Name",
-            "category Description",
+            "Category Name",
+            "Category Description",
             true);
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -33,11 +34,11 @@ public class CreateCategoryTest
                 It.IsAny<CancellationToken>()),
             Times.Once);
 
-        output.ShouldNotBeNull();
-        output.Name.Should().Be("category Name");
-        output.Description.Should().Be("category Description");
+        output.Should().NotBeNull();
+        output.Name.Should().Be("Category Name");
+        output.Description.Should().Be("Category Description");
         output.IsActive.Should().Be(true);
-        (output.Id != null && output.Id != Guid.Empty).Should().BeTrue();
-        (output.CreatedAt != null).Should().Be(true);
+        output.Id.Should().NotBeEmpty();
+        output.CreatedAt.Should().NotBeSameDateAs(default);
     }
 }

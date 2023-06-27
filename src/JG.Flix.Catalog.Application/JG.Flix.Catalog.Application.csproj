@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JG.Flix.Catalog.Domain\JG.Flix.Catalog.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
