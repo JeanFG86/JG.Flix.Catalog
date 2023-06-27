@@ -15,7 +15,7 @@ public class CreateCategoryTest
         var repositoryMock = new Mock<ICategoryRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
-        var input = new CreateCategoryInput(
+        var input = new UseCases.CreateCategoryInput(
             "category Name",
             "category Description",
             true);
