@@ -3,7 +3,7 @@ using JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Repository;
 using Moq;
 using Xunit;
-using UseCases = JG.Flix.Catalog.Application.UseCases.CreateCategory;
+using UseCases = JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
 
 namespace JG.Flix.Catalog.UnitTests.Application;
 public class CreateCategoryTest
