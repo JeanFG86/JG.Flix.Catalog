@@ -1,4 +1,4 @@
-﻿namespace JG.Flix.Catalog.UnitTests.Application;
+﻿namespace JG.Flix.Catalog.UnitTests.Application.CreateCategory;
 public class CreateCategoryTestDataGenerator
 {
     public static IEnumerable<object[]> GetInvalidInputs(int times = 12)
@@ -7,9 +7,9 @@ public class CreateCategoryTestDataGenerator
         var invalidInputsList = new List<object[]>();
         var totalInvalidCases = 4;
 
-        for(int index = 0; index < times; index++)
+        for (int index = 0; index < times; index++)
         {
-            switch(index % totalInvalidCases)
+            switch (index % totalInvalidCases)
             {
                 case 0:
                     invalidInputsList.Add(new object[] { fixture.GetInvalidInputShortName(), "Name should be at least 3 characteres long" });

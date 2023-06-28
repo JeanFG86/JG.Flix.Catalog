@@ -5,10 +5,10 @@ using JG.Flix.Catalog.UnitTests.Common;
 using Moq;
 using Xunit;
 
-namespace JG.Flix.Catalog.UnitTests.Application;
+namespace JG.Flix.Catalog.UnitTests.Application.CreateCategory;
 
 [CollectionDefinition(nameof(CreateCategoryTestFixture))]
-public class CreateCategoryTestFixtureCollection: ICollectionFixture<CreateCategoryTestFixture>
+public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCategoryTestFixture>
 {
 }
 

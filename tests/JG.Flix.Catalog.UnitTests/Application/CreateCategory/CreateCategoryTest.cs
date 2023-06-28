@@ -1,12 +1,11 @@
 ﻿using FluentAssertions;
-using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
+using App = JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
 using JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Exceptions;
-using JG.Flix.Catalog.UnitTests.Domain.Entity.Category;
 using Moq;
 using Xunit;
 
-namespace JG.Flix.Catalog.UnitTests.Application;
+namespace JG.Flix.Catalog.UnitTests.Application.CreateCategory;
 
 [Collection(nameof(CreateCategoryTestFixture))]
 public class CreateCategoryTest
@@ -25,7 +24,7 @@ public class CreateCategoryTest
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
 
-        var useCase = new CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        var useCase = new App.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
         var input = _fixture.GetInput();
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -51,10 +50,10 @@ public class CreateCategoryTest
 
     [Theory(DisplayName = nameof(ThrowWhenCantInstantiateCategory))]
     [Trait("Application", "CreateCategory Use Cases")]
-    [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), parameters:24, MemberType = typeof(CreateCategoryTestDataGenerator))]
-    public async Task ThrowWhenCantInstantiateCategory(CreateCategoryInput input, string exceptionMessage)
+    [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), parameters: 24, MemberType = typeof(CreateCategoryTestDataGenerator))]
+    public async Task ThrowWhenCantInstantiateCategory(App.CreateCategoryInput input, string exceptionMessage)
     {
-        var useCase = new CreateCategory(_fixture.GetRepositoryMock().Object, _fixture.GetUnitOfWorkMock().Object);
+        var useCase = new App.CreateCategory(_fixture.GetRepositoryMock().Object, _fixture.GetUnitOfWorkMock().Object);
 
         Func<Task> task = async () => await useCase.Handle(input, CancellationToken.None);
 
@@ -68,8 +67,8 @@ public class CreateCategoryTest
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
 
-        var useCase = new CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
-        var input = new CreateCategoryInput(_fixture.GetValidCategoryName());
+        var useCase = new App.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        var input = new App.CreateCategoryInput(_fixture.GetValidCategoryName());
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -99,8 +98,8 @@ public class CreateCategoryTest
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
 
-        var useCase = new CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
-        var input = new CreateCategoryInput(_fixture.GetValidCategoryName(), _fixture.GetValidCategoryDescription());
+        var useCase = new App.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        var input = new App.CreateCategoryInput(_fixture.GetValidCategoryName(), _fixture.GetValidCategoryDescription());
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -121,5 +120,5 @@ public class CreateCategoryTest
         output.IsActive.Should().Be(true);
         output.Id.Should().NotBeEmpty();
         output.CreatedAt.Should().NotBeSameDateAs(default);
-    }    
+    }
 }
