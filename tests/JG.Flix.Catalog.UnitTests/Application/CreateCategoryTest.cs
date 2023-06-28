@@ -49,10 +49,10 @@ public class CreateCategoryTest
         output.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
-    [Theory(DisplayName = nameof(ThrowWhenCantInstantiateAggregateAsync))]
+    [Theory(DisplayName = nameof(ThrowWhenCantInstantiateCategory))]
     [Trait("Application", "CreateCategory Use Cases")]
-    [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), MemberType = typeof(CreateCategoryTestDataGenerator))]
-    public async Task ThrowWhenCantInstantiateAggregateAsync(CreateCategoryInput input, string exceptionMessage)
+    [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), parameters:24, MemberType = typeof(CreateCategoryTestDataGenerator))]
+    public async Task ThrowWhenCantInstantiateCategory(CreateCategoryInput input, string exceptionMessage)
     {
         var useCase = new CreateCategory(_fixture.GetRepositoryMock().Object, _fixture.GetUnitOfWorkMock().Object);
 
