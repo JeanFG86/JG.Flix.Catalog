@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\JG.Flix.Catalog.Domain\JG.Flix.Catalog.Domain.csproj" />
   </ItemGroup>
 

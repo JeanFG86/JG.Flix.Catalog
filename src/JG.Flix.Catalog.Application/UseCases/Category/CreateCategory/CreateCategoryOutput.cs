@@ -1,4 +1,6 @@
-﻿namespace JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
+﻿using DomainEntity = JG.Flix.Catalog.Domain.Entity;
+
+namespace JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
 public class CreateCategoryOutput
 {
     public Guid Id { get; set; }
@@ -14,5 +16,10 @@ public class CreateCategoryOutput
         Description = description;
         IsActive = isActive;
         CreatedAt = createdAt;
+    }
+
+    public static CreateCategoryOutput FromCategory(DomainEntity.Category category)
+    {
+        return new CreateCategoryOutput(category.Id, category.Name, category.Description, category.IsActive, DateTime.Now);
     }
 }

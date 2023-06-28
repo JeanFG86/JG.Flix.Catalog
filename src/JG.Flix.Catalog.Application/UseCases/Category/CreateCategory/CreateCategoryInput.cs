@@ -1,5 +1,7 @@
-﻿namespace JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
-public class CreateCategoryInput
+﻿using MediatR;
+
+namespace JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
+public class CreateCategoryInput: IRequest<CreateCategoryOutput>
 {
 
     public string Name { get; set; }
