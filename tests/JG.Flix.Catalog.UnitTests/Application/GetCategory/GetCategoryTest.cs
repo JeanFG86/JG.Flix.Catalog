@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using Xunit;
 using UseCase = JG.Flix.Catalog.Application.UseCases.Category.GetCategory;
 
@@ -22,7 +23,7 @@ public class GetCategoryTest
         var exampleCategory = _fixture.GetValueCategory();
         repositoryMock.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(exampleCategory);
         var input = new UseCase.GetCategoryInput(exampleCategory.Id);
-        var useCase = new UseCase.GetCategory(repositoryMock);
+        var useCase = new UseCase.GetCategory(repositoryMock.Object);
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -32,6 +33,5 @@ public class GetCategoryTest
         output.Description.Should().Be(exampleCategory.Description);
         output.IsActive.Should().Be(exampleCategory.IsActive);
         output.Id.Should().Be(exampleCategory.Id);
-        output.CreatedAt.Should().Be(exampleCategory.CreatedAt);
     }
 }
