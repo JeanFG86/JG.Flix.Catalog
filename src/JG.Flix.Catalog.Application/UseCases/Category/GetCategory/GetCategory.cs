@@ -1,4 +1,5 @@
-﻿using JG.Flix.Catalog.Domain.Repository;
+﻿using JG.Flix.Catalog.Application.UseCases.Category.Common;
+using JG.Flix.Catalog.Domain.Repository;
 
 namespace JG.Flix.Catalog.Application.UseCases.Category.GetCategory;
 public class GetCategory : IGetCategory
@@ -10,9 +11,9 @@ public class GetCategory : IGetCategory
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<GetCategoryOutput> Handle(GetCategoryInput request, CancellationToken cancellationToken)
+    public async Task<CategoryModelOutput> Handle(GetCategoryInput request, CancellationToken cancellationToken)
     {
         var category = await _categoryRepository.Get(request.Id, cancellationToken);
-        return GetCategoryOutput.FromCategory(category);
+        return CategoryModelOutput.FromCategory(category);
     }
 }
