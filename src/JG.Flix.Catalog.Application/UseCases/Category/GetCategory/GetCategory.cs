@@ -1,8 +1,7 @@
 ﻿using JG.Flix.Catalog.Domain.Repository;
-using MediatR;
 
 namespace JG.Flix.Catalog.Application.UseCases.Category.GetCategory;
-public class GetCategory : IRequestHandler<GetCategoryInput, GetCategoryOutput>
+public class GetCategory : IGetCategory
 {
     private readonly ICategoryRepository _categoryRepository;
 
@@ -13,7 +12,7 @@ public class GetCategory : IRequestHandler<GetCategoryInput, GetCategoryOutput>
 
     public async Task<GetCategoryOutput> Handle(GetCategoryInput request, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.Get(request.Id, cancellationToken);        
+        var category = await _categoryRepository.Get(request.Id, cancellationToken);
         return GetCategoryOutput.FromCategory(category);
     }
 }
