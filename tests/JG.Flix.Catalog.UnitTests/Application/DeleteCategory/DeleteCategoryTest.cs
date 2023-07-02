@@ -1,6 +1,8 @@
 ﻿using Moq;
 using Xunit;
 using FluentAssertions;
+using UseCases = JG.Flix.Catalog.Application.UseCases.Category.DeleteCategory;
+using JG.Flix.Catalog.Application.UseCases.Category.DeleteCategory;
 
 namespace JG.Flix.Catalog.UnitTests.Application.DeleteCategory;
 
@@ -23,12 +25,12 @@ public class DeleteCategoryTest
         var categoryExample = _fixture.GetValidCategory();
         repositoryMock.Setup(x => x.Get(categoryExample.Id, It.IsAny<CancellationToken>())).ReturnsAsync(categoryExample);
         var input = new DeleteCategoryInput(categoryExample.Id);
-        var useCase = new DeleteCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        var useCase = new UseCases.DeleteCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
         await useCase.Handle(input, CancellationToken.None);
 
         repositoryMock.Verify(x => x.Get(categoryExample.Id, It.IsAny<CancellationToken>()), Times.Once);
-        repositoryMock.Verify(x => x.Delete(categoryExample.Id, It.IsAny<CancellationToken>()), Times.Once);
+        repositoryMock.Verify(x => x.Delete(categoryExample, It.IsAny<CancellationToken>()), Times.Once);
         unitOfWorkMock.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
     }
 }
