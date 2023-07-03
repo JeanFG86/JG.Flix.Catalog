@@ -1,4 +1,7 @@
-﻿using JG.Flix.Catalog.UnitTests.Common;
+﻿using JG.Flix.Catalog.Application.Interfaces;
+using JG.Flix.Catalog.Domain.Repository;
+using JG.Flix.Catalog.UnitTests.Common;
+using Moq;
 using Xunit;
 
 namespace JG.Flix.Catalog.UnitTests.Application.UpdateCategory;
@@ -8,4 +11,6 @@ public class UpdateCategoryTestFixtureCollection : ICollectionFixture<UpdateCate
 
 public class UpdateCategoryTestFixture: BaseFixture
 {
+    public Mock<ICategoryRepository> GetRepositoryMock() => new();
+    public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
 }
