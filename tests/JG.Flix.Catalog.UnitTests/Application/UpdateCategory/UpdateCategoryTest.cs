@@ -1,5 +1,8 @@
-﻿using JG.Flix.Catalog.UnitTests.Application.DeleteCategory;
+﻿using UseCase = JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
+using Moq;
 using Xunit;
+using JG.Flix.Catalog.Application.UseCases.Category.Common;
+using FluentAssertions;
 
 namespace JG.Flix.Catalog.UnitTests.Application.UpdateCategory;
 
@@ -15,9 +18,23 @@ public class UpdateCategoryTest
 
     [Fact(DisplayName = nameof(UpdateCategory))]
     [Trait("Application", "UpdateCategory - Use Cases")]
-    public void UpdateCategory()
+    public async Task UpdateCategory()
     {
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+        var exampleCategory = _fixture.GetExampleCategory();
+        repositoryMock.Setup(x => x.Get(exampleCategory.Id, It.IsAny<CancellationToken>())).ReturnsAsync(exampleCategory);
+        var input = new UseCase.UpdateCategoryInput(exampleCategory.Id, _fixture.GetValidCategoryName(), _fixture.GetValidCategoryDescription(), !exampleCategory.IsActive);
+        var usecase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+
+        CategoryModelOutput output = await usecase.Handle(input, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Name.Should().Be(input.Name);
+        output.Description.Should().Be(input.Description);
+        output.IsActive.Should().Be(input.IsActive);
+        repositoryMock.Verify(x => x.Get(exampleCategory.Id, It.IsAny<CancellationToken>()), Times.Once);
+        repositoryMock.Verify(x => x.Update(exampleCategory, It.IsAny<CancellationToken>()), Times.Once);
+        unitOfWorkMock.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
     }
 }
