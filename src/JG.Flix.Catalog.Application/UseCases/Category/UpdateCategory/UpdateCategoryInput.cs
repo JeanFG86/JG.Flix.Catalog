@@ -1,10 +1,5 @@
 ﻿using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 public class UpdateCategoryInput : IRequest<CategoryModelOutput>
