@@ -1,12 +1,7 @@
 ﻿using JG.Flix.Catalog.Application.Interfaces;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
-using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
 using JG.Flix.Catalog.Domain.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 public class UpdateCategory : IUpdateCategory
@@ -20,8 +15,20 @@ public class UpdateCategory : IUpdateCategory
         _unitOfWork = unitOfWork;
     }
 
-    public Task<CategoryModelOutput> Handle(UpdateCategoryInput request, CancellationToken cancellationToken)
+    public async Task<CategoryModelOutput> Handle(UpdateCategoryInput request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var category = await _categoryRepository.Get(request.Id, cancellationToken);
+        category.Update(request.Name, request.Description);
+        if(request.IsActive != category.IsActive)
+        {
+            if(request.IsActive)
+                category.Activate();
+            else
+                category.Deactivate();
+        }
+        await _categoryRepository.Update(category, cancellationToken);
+        await _unitOfWork.Commit(cancellationToken);
+
+        return CategoryModelOutput.FromCategory(category);
     }
 }
