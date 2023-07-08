@@ -3,6 +3,7 @@ using Moq;
 using Xunit;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using FluentAssertions;
+using JG.Flix.Catalog.Domain.Entity;
 
 namespace JG.Flix.Catalog.UnitTests.Application.UpdateCategory;
 
@@ -16,15 +17,14 @@ public class UpdateCategoryTest
         _fixture = fixture;
     }
 
-    [Fact(DisplayName = nameof(UpdateCategory))]
+    [Theory(DisplayName = nameof(UpdateCategory))]
     [Trait("Application", "UpdateCategory - Use Cases")]
-    public async Task UpdateCategory()
+    [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
+    public async Task UpdateCategory(Category exampleCategory, UseCase.UpdateCategoryInput input)
     {
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
-        var exampleCategory = _fixture.GetExampleCategory();
         repositoryMock.Setup(x => x.Get(exampleCategory.Id, It.IsAny<CancellationToken>())).ReturnsAsync(exampleCategory);
-        var input = new UseCase.UpdateCategoryInput(exampleCategory.Id, _fixture.GetValidCategoryName(), _fixture.GetValidCategoryDescription(), !exampleCategory.IsActive);
         var usecase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
         CategoryModelOutput output = await usecase.Handle(input, CancellationToken.None);
