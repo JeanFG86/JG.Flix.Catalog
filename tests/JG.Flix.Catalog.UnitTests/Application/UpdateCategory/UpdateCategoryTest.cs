@@ -4,6 +4,7 @@ using Xunit;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using FluentAssertions;
 using JG.Flix.Catalog.Domain.Entity;
+using JG.Flix.Catalog.Application.Exceptions;
 
 namespace JG.Flix.Catalog.UnitTests.Application.UpdateCategory;
 
@@ -37,4 +38,21 @@ public class UpdateCategoryTest
         repositoryMock.Verify(x => x.Update(exampleCategory, It.IsAny<CancellationToken>()), Times.Once);
         unitOfWorkMock.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
     }
+
+    [Fact(DisplayName = nameof(ThrowWhenCategoryNotFound))]
+    [Trait("Application", "UpdateCategory - Use Cases")]
+    public async Task ThrowWhenCategoryNotFound()
+    {
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+        var input = _fixture.GetValidInput();
+        repositoryMock.Setup(x => x.Get(input.Id, It.IsAny<CancellationToken>())).ThrowsAsync(new NotFoundException($"category '{input.Id}' not found"));
+        var usecase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);       
+
+        var task = async () => await usecase.Handle(input, CancellationToken.None);
+
+        await task.Should().ThrowAsync<NotFoundException>();
+        repositoryMock.Verify(x => x.Get(input.Id, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
 }

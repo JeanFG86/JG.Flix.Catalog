@@ -1,5 +1,6 @@
 ﻿using JG.Flix.Catalog.Application.Interfaces;
 using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
+using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 using JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Repository;
 using JG.Flix.Catalog.UnitTests.Common;
@@ -41,4 +42,7 @@ public class UpdateCategoryTestFixture: BaseFixture
     public bool GetRandonBoolean() => new Random().NextDouble() < 0.5;
 
     public Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
+
+    public UpdateCategoryInput GetValidInput(Guid? id = null) => new(id ?? Guid.NewGuid(), GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
+    
 }
