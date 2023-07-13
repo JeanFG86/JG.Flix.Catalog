@@ -5,7 +5,6 @@ using Moq;
 using Xunit;
 using FluentAssertions;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
-using JG.Flix.Catalog.UnitTests.Application.UpdateCategory;
 
 namespace JG.Flix.Catalog.UnitTests.Application.ListCategories;
 
@@ -111,6 +110,49 @@ public class ListCategoriesTest
             outputItem.Description.Should().Be(repositoryCategory.Description);
             outputItem.IsActive.Should().Be(repositoryCategory.IsActive);
         });
+        repositoryMock.Verify(x => x.Search(
+            It.Is<SearchInput>(
+                searchInput => searchInput.Page == input.Page
+                && searchInput.PerPage == input.PerPage
+                && searchInput.Search == input.Search
+                && searchInput.OrderBy == input.Sort
+                && searchInput.Order == input.Dir
+            ),
+            It.IsAny<CancellationToken>()
+       ), Times.Once);
+    }
+
+    [Fact(DisplayName = nameof(ListOkWhenEmpty))]
+    [Trait("Application", "ListCategories - Use Cases")]
+    public async Task ListOkWhenEmpty()
+    {
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var input = _fixture.GetExampleInput();
+        var outputRespositorySearch = new SearchOutput<Category>(
+              currentPage: input.Page,
+              perPage: input.PerPage,
+              total: 0,
+              items: (new List<Category>()).AsReadOnly()
+       );
+        repositoryMock.Setup(x => x.Search(
+            It.Is<SearchInput>(
+                searchInput => searchInput.Page == input.Page
+                && searchInput.PerPage == input.PerPage
+                && searchInput.Search == input.Search
+                && searchInput.OrderBy == input.Sort
+                && searchInput.Order == input.Dir
+            ),
+            It.IsAny<CancellationToken>()
+       )).ReturnsAsync(outputRespositorySearch);
+        var useCases = new UseCase.ListCategories(repositoryMock.Object);
+
+        var output = await useCases.Handle(input, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Page.Should().Be(outputRespositorySearch.CurrentPage);
+        output.PerPage.Should().Be(outputRespositorySearch.PerPage);
+        output.Total.Should().Be(0);
+        output.Items.Should().HaveCount(0);
         repositoryMock.Verify(x => x.Search(
             It.Is<SearchInput>(
                 searchInput => searchInput.Page == input.Page
