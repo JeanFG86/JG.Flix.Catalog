@@ -23,7 +23,7 @@ public class DeleteCategoryTest
     {
         var repositoryMock =  _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
-        var categoryExample = _fixture.GetValidCategory();
+        var categoryExample = _fixture.GetExampleCategory();
         repositoryMock.Setup(x => x.Get(categoryExample.Id, It.IsAny<CancellationToken>())).ReturnsAsync(categoryExample);
         var input = new DeleteCategoryInput(categoryExample.Id);
         var useCase = new UseCases.DeleteCategory(repositoryMock.Object, unitOfWorkMock.Object);

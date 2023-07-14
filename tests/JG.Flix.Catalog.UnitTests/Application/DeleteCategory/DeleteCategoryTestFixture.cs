@@ -12,6 +12,5 @@ namespace JG.Flix.Catalog.UnitTests.Application.DeleteCategory;
 public class DeleteCategoryTestFixtureCollection : ICollectionFixture<DeleteCategoryTestFixture> { }
 
 public class DeleteCategoryTestFixture: CategoryUseCasesBaseFixture
-{
-    public Category GetValidCategory() => new(GetValidCategoryName(), GetValidCategoryDescription());
+{   
 }
