@@ -3,12 +3,12 @@ using Moq;
 using Xunit;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using FluentAssertions;
-using JG.Flix.Catalog.Domain.Entity;
+using DomainEntity = JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Application.Exceptions;
 using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 using JG.Flix.Catalog.Domain.Exceptions;
 
-namespace JG.Flix.Catalog.UnitTests.Application.UpdateCategory;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.UpdateCategory;
 
 [Collection(nameof(UpdateCategoryTestFixture))]
 public class UpdateCategoryTest
@@ -23,7 +23,7 @@ public class UpdateCategoryTest
     [Theory(DisplayName = nameof(UpdateCategory))]
     [Trait("Application", "UpdateCategory - Use Cases")]
     [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-    public async Task UpdateCategory(Category exampleCategory, UpdateCategoryInput input)
+    public async Task UpdateCategory(DomainEntity.Category exampleCategory, UpdateCategoryInput input)
     {
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
@@ -44,7 +44,7 @@ public class UpdateCategoryTest
     [Theory(DisplayName = nameof(UpdateCategoryWithoutProvidingIsActive))]
     [Trait("Application", "UpdateCategory - Use Cases")]
     [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-    public async Task UpdateCategoryWithoutProvidingIsActive(Category exampleCategory, UpdateCategoryInput exampleInput)
+    public async Task UpdateCategoryWithoutProvidingIsActive(DomainEntity.Category exampleCategory, UpdateCategoryInput exampleInput)
     {
         var input = new UpdateCategoryInput(exampleInput.Id, exampleInput.Name, exampleInput.Description);
         var repositoryMock = _fixture.GetRepositoryMock();
@@ -66,7 +66,7 @@ public class UpdateCategoryTest
     [Theory(DisplayName = nameof(UpdateCategoryOnlyName))]
     [Trait("Application", "UpdateCategory - Use Cases")]
     [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-    public async Task UpdateCategoryOnlyName(Category exampleCategory, UpdateCategoryInput exampleInput)
+    public async Task UpdateCategoryOnlyName(DomainEntity.Category exampleCategory, UpdateCategoryInput exampleInput)
     {
         var input = new UpdateCategoryInput(exampleInput.Id, exampleInput.Name);
         var repositoryMock = _fixture.GetRepositoryMock();
@@ -93,7 +93,7 @@ public class UpdateCategoryTest
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
         var input = _fixture.GetValidInput();
         repositoryMock.Setup(x => x.Get(input.Id, It.IsAny<CancellationToken>())).ThrowsAsync(new NotFoundException($"category '{input.Id}' not found"));
-        var usecase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);       
+        var usecase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
         var task = async () => await usecase.Handle(input, CancellationToken.None);
 

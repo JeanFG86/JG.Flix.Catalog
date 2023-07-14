@@ -1,7 +1,6 @@
-﻿
-using JG.Flix.Catalog.Application.UseCases.Category.ListCategories;
+﻿using JG.Flix.Catalog.Application.UseCases.Category.ListCategories;
 
-namespace JG.Flix.Catalog.UnitTests.Application.ListCategories;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.ListCategories;
 public class ListCategoriesTestDataGenerator
 {
     public static IEnumerable<object[]> GetInputsWithoutAllParameters(int times = 10)
@@ -15,7 +14,7 @@ public class ListCategoriesTestDataGenerator
             {
                 case 0:
                     yield return new object[] { new ListCategoriesInput() };
-                    break; 
+                    break;
                 case 1:
                     yield return new object[] { new ListCategoriesInput(inputExample.Page) };
                     break;
@@ -31,7 +30,7 @@ public class ListCategoriesTestDataGenerator
                 case 5:
                     yield return new object[] { inputExample };
                     break;
-               default:
+                default:
                     yield return new object[] { new ListCategoriesInput() };
                     break;
 

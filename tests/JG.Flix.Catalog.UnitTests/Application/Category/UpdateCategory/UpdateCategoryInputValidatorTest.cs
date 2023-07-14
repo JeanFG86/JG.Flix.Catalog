@@ -2,7 +2,7 @@
 using FluentAssertions;
 using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 
-namespace JG.Flix.Catalog.UnitTests.Application.UpdateCategory;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.UpdateCategory;
 
 [Collection(nameof(UpdateCategoryTestFixture))]
 public class UpdateCategoryInputValidatorTest

@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using App = JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
-using JG.Flix.Catalog.Domain.Entity;
+using DomainEntity = JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Exceptions;
 using Moq;
 using Xunit;
 
-namespace JG.Flix.Catalog.UnitTests.Application.CreateCategory;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.CreateCategory;
 
 [Collection(nameof(CreateCategoryTestFixture))]
 public class CreateCategoryTest
@@ -31,7 +31,7 @@ public class CreateCategoryTest
 
         repositoryMock.Verify(
             repository => repository.Insert(
-                It.IsAny<Category>(),
+                It.IsAny<DomainEntity.Category>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
 
@@ -74,7 +74,7 @@ public class CreateCategoryTest
 
         repositoryMock.Verify(
             repository => repository.Insert(
-                It.IsAny<Category>(),
+                It.IsAny<DomainEntity.Category>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
 
@@ -105,7 +105,7 @@ public class CreateCategoryTest
 
         repositoryMock.Verify(
             repository => repository.Insert(
-                It.IsAny<Category>(),
+                It.IsAny<DomainEntity.Category>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
 

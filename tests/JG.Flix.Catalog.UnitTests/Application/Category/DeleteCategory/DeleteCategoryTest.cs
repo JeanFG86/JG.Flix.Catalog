@@ -5,7 +5,7 @@ using UseCases = JG.Flix.Catalog.Application.UseCases.Category.DeleteCategory;
 using JG.Flix.Catalog.Application.UseCases.Category.DeleteCategory;
 using JG.Flix.Catalog.Application.Exceptions;
 
-namespace JG.Flix.Catalog.UnitTests.Application.DeleteCategory;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.DeleteCategory;
 
 [Collection(nameof(DeleteCategoryTestFixture))]
 public class DeleteCategoryTest
@@ -21,7 +21,7 @@ public class DeleteCategoryTest
     [Trait("Application", "DeleteCategory - Use Cases")]
     public async Task DeleteCategory()
     {
-        var repositoryMock =  _fixture.GetRepositoryMock();
+        var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
         var categoryExample = _fixture.GetExampleCategory();
         repositoryMock.Setup(x => x.Get(categoryExample.Id, It.IsAny<CancellationToken>())).ReturnsAsync(categoryExample);

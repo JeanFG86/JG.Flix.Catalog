@@ -1,8 +1,8 @@
 ﻿using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
-using JG.Flix.Catalog.UnitTests.Application.Common;
+using JG.Flix.Catalog.UnitTests.Application.Category.Common;
 using Xunit;
 
-namespace JG.Flix.Catalog.UnitTests.Application.CreateCategory;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.CreateCategory;
 
 [CollectionDefinition(nameof(CreateCategoryTestFixture))]
 public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCategoryTestFixture>
@@ -11,8 +11,8 @@ public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCate
 
 public class CreateCategoryTestFixture : CategoryUseCasesBaseFixture
 {
-    
-    public CreateCategoryInput GetInput() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());    
+
+    public CreateCategoryInput GetInput() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
 
     public CreateCategoryInput GetInvalidInputShortName()
     {

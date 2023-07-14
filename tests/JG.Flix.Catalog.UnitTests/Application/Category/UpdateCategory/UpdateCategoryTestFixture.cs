@@ -1,13 +1,13 @@
 ﻿using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
-using JG.Flix.Catalog.UnitTests.Application.Common;
+using JG.Flix.Catalog.UnitTests.Application.Category.Common;
 using Xunit;
 
-namespace JG.Flix.Catalog.UnitTests.Application.UpdateCategory;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.UpdateCategory;
 
 [CollectionDefinition(nameof(UpdateCategoryTestFixture))]
 public class UpdateCategoryTestFixtureCollection : ICollectionFixture<UpdateCategoryTestFixture> { }
 
-public class UpdateCategoryTestFixture: CategoryUseCasesBaseFixture
+public class UpdateCategoryTestFixture : CategoryUseCasesBaseFixture
 {
     public UpdateCategoryInput GetValidInput(Guid? id = null) => new(id ?? Guid.NewGuid(), GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
 

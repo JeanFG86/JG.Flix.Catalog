@@ -4,7 +4,7 @@ using Xunit;
 using UseCase = JG.Flix.Catalog.Application.UseCases.Category.GetCategory;
 using JG.Flix.Catalog.Application.Exceptions;
 
-namespace JG.Flix.Catalog.UnitTests.Application.GetCategory;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.GetCategory;
 
 [Collection(nameof(GetCategoryTestFixture))]
 public class GetCategoryTest
@@ -46,7 +46,7 @@ public class GetCategoryTest
         var input = new UseCase.GetCategoryInput(exampleGuid);
         var useCase = new UseCase.GetCategory(repositoryMock.Object);
 
-        var task = async() => await useCase.Handle(input, CancellationToken.None);
+        var task = async () => await useCase.Handle(input, CancellationToken.None);
 
         await task.Should().ThrowAsync<NotFoundException>();
 

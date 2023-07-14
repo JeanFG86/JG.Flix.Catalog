@@ -1,4 +1,6 @@
-﻿namespace JG.Flix.Catalog.UnitTests.Application.CreateCategory;
+﻿using JG.Flix.Catalog.UnitTests.Application.Category.CreateCategory;
+
+namespace JG.Flix.Catalog.UnitTests.Application.Category.CreateCategory;
 public class CreateCategoryTestDataGenerator
 {
     public static IEnumerable<object[]> GetInvalidInputs(int times = 12)

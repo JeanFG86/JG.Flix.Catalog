@@ -1,11 +1,10 @@
-﻿
-using JG.Flix.Catalog.Application.Interfaces;
-using JG.Flix.Catalog.Domain.Entity;
+﻿using JG.Flix.Catalog.Application.Interfaces;
+using DomainEntity = JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Repository;
 using JG.Flix.Catalog.UnitTests.Common;
 using Moq;
 
-namespace JG.Flix.Catalog.UnitTests.Application.Common;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.Common;
 public abstract class CategoryUseCasesBaseFixture : BaseFixture
 {
     public string GetValidCategoryName()
@@ -35,5 +34,5 @@ public abstract class CategoryUseCasesBaseFixture : BaseFixture
     public Mock<ICategoryRepository> GetRepositoryMock() => new();
     public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
 
-    public Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
+    public DomainEntity.Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
 }

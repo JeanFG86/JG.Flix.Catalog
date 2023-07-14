@@ -2,7 +2,7 @@
 using JG.Flix.Catalog.Application.UseCases.Category.GetCategory;
 using Xunit;
 
-namespace JG.Flix.Catalog.UnitTests.Application.GetCategory;
+namespace JG.Flix.Catalog.UnitTests.Application.Category.GetCategory;
 
 [Collection(nameof(GetCategoryTestFixture))]
 public class GetCategoryInputValidatorTest
