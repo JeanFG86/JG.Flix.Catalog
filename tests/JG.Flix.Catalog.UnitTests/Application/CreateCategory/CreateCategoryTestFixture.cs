@@ -1,9 +1,5 @@
-﻿using JG.Flix.Catalog.Application.Interfaces;
-using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
-using JG.Flix.Catalog.Domain.Repository;
+﻿using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
 using JG.Flix.Catalog.UnitTests.Application.Common;
-using JG.Flix.Catalog.UnitTests.Common;
-using Moq;
 using Xunit;
 
 namespace JG.Flix.Catalog.UnitTests.Application.CreateCategory;
