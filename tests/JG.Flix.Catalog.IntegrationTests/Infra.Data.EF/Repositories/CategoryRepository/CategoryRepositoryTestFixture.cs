@@ -1,5 +1,6 @@
 ﻿using JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Repository;
+using JG.Flix.Catalog.Infra.Data.EF;
 using JG.Flix.Catalog.IntegrationTests.Common;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -40,6 +41,6 @@ public class CategoryRepositoryTestFixture : BaseFixture
 
     public FlixCatalogDbContext CreateDbContext()
     {
-        var dbContext = new FlixCatalogDbContext(new DbContextOptionsBuilder<FlixCatalogDbContext>().UseInMemoryDatabase("integration-test-db").Options);
+        return new FlixCatalogDbContext(new DbContextOptionsBuilder<FlixCatalogDbContext>().UseInMemoryDatabase("integration-test-db").Options);
     }
 }

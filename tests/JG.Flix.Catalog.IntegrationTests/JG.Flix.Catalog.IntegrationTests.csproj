@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\JG.Flix.Catalog.Domain\JG.Flix.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\..\src\JG.Flix.Catalog.Infra.Data.EF\JG.Flix.Catalog.Infra.Data.EF.csproj" />
   </ItemGroup>
 
 </Project>

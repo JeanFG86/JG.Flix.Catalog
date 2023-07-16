@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -13,11 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\JG.Flix.Catalog.Application\JG.Flix.Catalog.Application.csproj" />
     <ProjectReference Include="..\JG.Flix.Catalog.Domain\JG.Flix.Catalog.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Configurations\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>
