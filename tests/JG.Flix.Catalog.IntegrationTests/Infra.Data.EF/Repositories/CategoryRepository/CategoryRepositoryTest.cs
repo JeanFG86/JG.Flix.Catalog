@@ -32,4 +32,25 @@ public class CategoryRepositoryTest
         dbCategory.Description.Should().Be(exampleCategory.Description);  
         dbCategory.IsActive.Should().Be(exampleCategory.IsActive);  
     }
+
+    [Fact(DisplayName = nameof(Get))]
+    [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+    public async Task Get()
+    {
+        FlixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        var exampleCategory = _fixture.GetExampleCategory();
+        var exampleCategoryList = _fixture.GetExampleCategoryList(15);
+        exampleCategoryList.Add(exampleCategory);
+        await dbContext.AddRangeAsync(exampleCategoryList);
+        await dbContext.SaveChangesAsync();
+        var categoryRepository = new Repository.CategoryRepository(dbContext);        
+
+        var dbCategory = await categoryRepository.Get(exampleCategory.Id, CancellationToken.None);
+
+        dbCategory.Should().NotBeNull();
+        dbCategory.Id.Should().Be(exampleCategory.Id);
+        dbCategory!.Name.Should().Be(exampleCategory.Name);
+        dbCategory.Description.Should().Be(exampleCategory.Description);
+        dbCategory.IsActive.Should().Be(exampleCategory.IsActive);
+    }
 }

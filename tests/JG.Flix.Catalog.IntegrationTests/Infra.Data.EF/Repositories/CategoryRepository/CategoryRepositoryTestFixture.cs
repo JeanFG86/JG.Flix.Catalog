@@ -38,6 +38,7 @@ public class CategoryRepositoryTestFixture : BaseFixture
     public bool GetRandonBoolean() => new Random().NextDouble() < 0.5;
 
     public Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
+    public List<Category> GetExampleCategoryList(int length = 10) => Enumerable.Range(1, length).Select(_ => GetExampleCategory()).ToList();
 
     public FlixCatalogDbContext CreateDbContext()
     {
