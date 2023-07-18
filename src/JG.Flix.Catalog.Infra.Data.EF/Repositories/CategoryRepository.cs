@@ -39,6 +39,6 @@ public class CategoryRepository : ICategoryRepository
 
     public Task Update(Category aggregate, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+       return Task.FromResult(_categories.Update(aggregate));
     }
 }
