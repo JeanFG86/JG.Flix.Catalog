@@ -2,6 +2,7 @@
 using Xunit;
 using JG.Flix.Catalog.Infra.Data.EF;
 using Repository = JG.Flix.Catalog.Infra.Data.EF.Repositories;
+using JG.Flix.Catalog.Application.Exceptions;
 
 namespace JG.Flix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.CategoryRepository;
 
@@ -52,5 +53,20 @@ public class CategoryRepositoryTest
         dbCategory!.Name.Should().Be(exampleCategory.Name);
         dbCategory.Description.Should().Be(exampleCategory.Description);
         dbCategory.IsActive.Should().Be(exampleCategory.IsActive);
+    }
+
+    [Fact(DisplayName = nameof(GetThrowIfNotFound))]
+    [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+    public async Task GetThrowIfNotFound()
+    {
+        FlixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        var exampleId = Guid.NewGuid();
+        await dbContext.AddRangeAsync(_fixture.GetExampleCategoryList(15));
+        await dbContext.SaveChangesAsync();
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+
+        var task = async () => await categoryRepository.Get(exampleId, CancellationToken.None);
+
+        await task.Should().ThrowAsync<NotFoundException>().WithMessage($"Category {exampleId} not found.");
     }
 }

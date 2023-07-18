@@ -1,4 +1,5 @@
-﻿using JG.Flix.Catalog.Domain.Entity;
+﻿using JG.Flix.Catalog.Application.Exceptions;
+using JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Repository;
 using JG.Flix.Catalog.Domain.SeedWork.SearchableRepository;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,9 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<Category> Get(Guid id, CancellationToken cancellationToken)
     {
-        return await _categories.FindAsync(new object[] { id }, cancellationToken);
+        var category = await _categories.FindAsync(new object[] { id }, cancellationToken);        
+        NotFoundException.ThrowIfNull(category, $"Category {id} not found.");
+        return category!;
     }    
 
     public Task<SearchOutput<Category>> Search(SearchInput input, CancellationToken cancellationToken)
