@@ -20,9 +20,9 @@ public class CategoryRepository : ICategoryRepository
         await _categories.AddAsync(aggregate, cancellationToken);
     }
 
-    public Task Delete(Category aggregate, CancellationToken cancellationToken)
+    public Task Delete(Category aggregate, CancellationToken _)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_categories.Remove(aggregate));
     }
 
     public async Task<Category> Get(Guid id, CancellationToken cancellationToken)

@@ -94,4 +94,23 @@ public class CategoryRepositoryTest
         dbCategory.Description.Should().Be(exampleCategory.Description);
         dbCategory.IsActive.Should().Be(exampleCategory.IsActive);
     }
+
+    [Fact(DisplayName = nameof(Delete))]
+    [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+    public async Task Delete()
+    {
+        FlixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        var exampleCategory = _fixture.GetExampleCategory();
+        var exampleCategoryList = _fixture.GetExampleCategoryList(15);
+        exampleCategoryList.Add(exampleCategory);
+        await dbContext.AddRangeAsync(exampleCategoryList);
+        await dbContext.SaveChangesAsync();
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+
+        await categoryRepository.Delete(exampleCategory, CancellationToken.None);
+        dbContext.SaveChanges();
+
+        var dbCategory = await (_fixture.CreateDbContext()).Categories.FindAsync(exampleCategory.Id);
+        dbCategory.Should().BeNull();       
+    }
 }
