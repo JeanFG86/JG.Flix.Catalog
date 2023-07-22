@@ -40,11 +40,21 @@ public class CategoryRepositoryTestFixture : BaseFixture
     public Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
     public List<Category> GetExampleCategoryList(int length = 10) => Enumerable.Range(1, length).Select(_ => GetExampleCategory()).ToList();
 
+    public List<Category> GetExampleCategoryListWhithNames(List<string> names) 
+    {
+        return names.Select(n =>
+        {
+            var category = GetExampleCategory();
+            category.Update(n);
+            return category;
+        }).ToList();
+    } 
+
     public FlixCatalogDbContext CreateDbContext(bool preserveData = false)
     {
         var context = new FlixCatalogDbContext(new DbContextOptionsBuilder<FlixCatalogDbContext>().UseInMemoryDatabase("integration-test-db").Options);
 
-        if(preserveData == false)
+        if (preserveData == false)
             context.Database.EnsureDeleted();
 
         return context;

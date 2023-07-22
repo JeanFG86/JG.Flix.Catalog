@@ -197,4 +197,47 @@ public class CategoryRepositoryTest
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
         }
     }
+
+    [Theory(DisplayName = nameof(SearhByText))]
+    [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+    [InlineData("Action", 1, 5, 1, 1)]
+    [InlineData("Horror", 1, 5, 2, 2)]
+    [InlineData("Horror", 2, 5, 0, 2)]
+    [InlineData("Sci-fi", 1, 3, 0, 0)]
+    [InlineData("Facts", 1, 5, 2, 2)]
+    public async Task SearhByText(string search, int page, int perPage, int expectedQuantityItemsReturned, int expectedQuantityItemsTotalItems)
+    {
+        FlixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        var exampleCategoryList = _fixture.GetExampleCategoryListWhithNames(new List<string>()
+        {
+            "Action",
+            "Horror",
+            "Horror - Based on Real Facts",
+            "Drama",
+            "Drama - Based on Real Facts",
+            "Comedy"
+        });
+        await dbContext.AddRangeAsync(exampleCategoryList);
+        await dbContext.SaveChangesAsync();
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+        var searchInput = new SearchInput(page, perPage, search, "", SearchOrder.Asc);
+
+        var output = await categoryRepository.Search(searchInput, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Items.Should().NotBeNull();
+        output.CurrentPage.Should().Be(searchInput.Page);
+        output.PerPage.Should().Be(searchInput.PerPage);
+        output.Total.Should().Be(expectedQuantityItemsTotalItems);
+        output.Items.Should().HaveCount(expectedQuantityItemsReturned);
+
+        foreach (Category outputItem in output.Items)
+        {
+            var exampleItem = exampleCategoryList.Find(category => category.Id == outputItem.Id);
+            exampleItem.Should().NotBeNull();
+            outputItem!.Name.Should().Be(exampleItem!.Name);
+            outputItem.Description.Should().Be(exampleItem.Description);
+            outputItem.IsActive.Should().Be(exampleItem.IsActive);
+        }
+    }
 }
