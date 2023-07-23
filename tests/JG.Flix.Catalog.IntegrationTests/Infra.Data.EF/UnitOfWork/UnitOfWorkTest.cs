@@ -19,6 +19,7 @@ public class UnitOfWorkTest
     [Trait("Integration/Infra.Data", "UnitOfWork - Persistence")]
     public async Task Commit()
     {
+        var dbId = Guid.NewGuid().ToString();
         var dbContext = _fixture.CreateDbContext();
         var exampleCategoriesList = _fixture.GetExampleCategoryList();
         await dbContext.AddRangeAsync(exampleCategoriesList);
