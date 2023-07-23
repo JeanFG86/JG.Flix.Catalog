@@ -63,7 +63,7 @@ public class CategoryRepository : ICategoryRepository
             ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
             ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
             ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-            _ => throw new NotImplementedException()
+            _ => query.OrderBy(x => x.Name)
         };
     }
 }
