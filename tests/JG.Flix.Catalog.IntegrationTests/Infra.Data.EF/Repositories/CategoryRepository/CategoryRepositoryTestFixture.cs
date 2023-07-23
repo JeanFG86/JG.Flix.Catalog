@@ -1,5 +1,6 @@
 ﻿using JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Repository;
+using JG.Flix.Catalog.Domain.SeedWork.SearchableRepository;
 using JG.Flix.Catalog.Infra.Data.EF;
 using JG.Flix.Catalog.IntegrationTests.Common;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,22 @@ public class CategoryRepositoryTestFixture : BaseFixture
             return category;
         }).ToList();
     } 
+
+    public List<Category> CloneCategoriesListOrdered(List<Category> categoriesList, string orderBy, SearchOrder order)
+    {
+        var listClone = new List<Category>(categoriesList);
+        var orderedEnumerable = (orderBy, order) switch
+        {
+            ("name", SearchOrder.Asc) => listClone.OrderBy(n => n.Name),
+            ("name", SearchOrder.Desc) => listClone.OrderByDescending(n => n.Name),
+            ("id", SearchOrder.Asc) => listClone.OrderBy(n => n.Id),
+            ("id", SearchOrder.Desc) => listClone.OrderByDescending(n => n.Id),
+            ("createdat", SearchOrder.Asc) => listClone.OrderBy(n => n.CreatedAt),
+            ("createdat", SearchOrder.Desc) => listClone.OrderByDescending(n => n.CreatedAt),
+            _ => listClone.OrderBy(n => n.Name),
+        };
+        return orderedEnumerable.ToList();
+    }
 
     public FlixCatalogDbContext CreateDbContext(bool preserveData = false)
     {
