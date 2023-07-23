@@ -13,7 +13,6 @@ public class CategoryRepositoryTestFixtureCollecton : ICollectionFixture<Categor
 
 public class CategoryRepositoryTestFixture : BaseFixture
 {
-
     public string GetValidCategoryName()
     {
         var categoryName = "";
@@ -65,15 +64,5 @@ public class CategoryRepositoryTestFixture : BaseFixture
             _ => listClone.OrderBy(n => n.Name),
         };
         return orderedEnumerable.ToList();
-    }
-
-    public FlixCatalogDbContext CreateDbContext(bool preserveData = false)
-    {
-        var context = new FlixCatalogDbContext(new DbContextOptionsBuilder<FlixCatalogDbContext>().UseInMemoryDatabase("integration-test-db").Options);
-
-        if (preserveData == false)
-            context.Database.EnsureDeleted();
-
-        return context;
-    }
+    }    
 }
