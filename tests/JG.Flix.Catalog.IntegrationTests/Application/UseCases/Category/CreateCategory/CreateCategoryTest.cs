@@ -3,6 +3,8 @@ using JG.Flix.Catalog.Infra.Data.EF.Repositories;
 using App = JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
 using Xunit;
 using FluentAssertions;
+using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
+using JG.Flix.Catalog.Domain.Exceptions;
 
 namespace JG.Flix.Catalog.IntegrationTests.Application.UseCases.Category.CreateCategory;
 
@@ -91,5 +93,20 @@ public class CreateCategoryTest
         output.IsActive.Should().Be(true);
         output.Id.Should().NotBeEmpty();
         output.CreatedAt.Should().NotBeSameDateAs(default);
+    }
+
+    [Theory(DisplayName = nameof(ThrowWhenCantInstantiateCategory))]
+    [Trait("Integration/Application", "CreateCategory - Use Cases")]
+    [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), parameters: 6, MemberType = typeof(CreateCategoryTestDataGenerator))]
+    public async void ThrowWhenCantInstantiateCategory(CreateCategoryInput input, string expectedExceptionMessage)
+    {
+        var dbContext = _fixture.CreateDbContext();
+        var repository = new CategoryRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+        var useCase = new App.CreateCategory(repository, unitOfWork);
+
+        var task = async () => await useCase.Handle(input, CancellationToken.None);   
+        
+        await task.Should().ThrowAsync<EntityValidationException>().WithMessage(expectedExceptionMessage);
     }
 }
