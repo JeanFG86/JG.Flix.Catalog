@@ -67,4 +67,29 @@ public class CreateCategoryTest
         output.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
+    [Fact(DisplayName = nameof(CreateCategoryOnlyWithNameAndDescription))]
+    [Trait("Integration/Application", "CreateCategory - Use Cases")]
+    public async void CreateCategoryOnlyWithNameAndDescription()
+    {
+        var dbContext = _fixture.CreateDbContext();
+        var repository = new CategoryRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+        var useCase = new App.CreateCategory(repository, unitOfWork);
+        var exampleCategory = _fixture.GetInput();
+        var input = new App.CreateCategoryInput(exampleCategory.Name, exampleCategory.Description);
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(output.Id);
+        dbCategory.Should().NotBeNull();
+        dbCategory!.Name.Should().Be(input.Name);
+        dbCategory.Description.Should().Be(input.Description);
+        dbCategory.IsActive.Should().Be(true);
+        output.Should().NotBeNull();
+        output.Name.Should().Be(input.Name);
+        output.Description.Should().Be(input.Description);
+        output.IsActive.Should().Be(true);
+        output.Id.Should().NotBeEmpty();
+        output.CreatedAt.Should().NotBeSameDateAs(default);
+    }
 }
