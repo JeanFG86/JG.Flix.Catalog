@@ -8,5 +8,5 @@ namespace JG.Flix.Catalog.IntegrationTests.Application.UseCases.Category.GetCate
 public class GetCategoryTestFixtureCollecton : ICollectionFixture<GetCategoryTestFixture> { }
 
 public class GetCategoryTestFixture : CategoryUseCasesBaseFixture
-{
+{    
 }
