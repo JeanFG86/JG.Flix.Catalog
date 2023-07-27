@@ -5,6 +5,7 @@ using Xunit;
 using FluentAssertions;
 using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
 using JG.Flix.Catalog.Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace JG.Flix.Catalog.IntegrationTests.Application.UseCases.Category.CreateCategory;
 
@@ -97,7 +98,7 @@ public class CreateCategoryTest
 
     [Theory(DisplayName = nameof(ThrowWhenCantInstantiateCategory))]
     [Trait("Integration/Application", "CreateCategory - Use Cases")]
-    [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), parameters: 6, MemberType = typeof(CreateCategoryTestDataGenerator))]
+    [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), parameters: 4, MemberType = typeof(CreateCategoryTestDataGenerator))]
     public async void ThrowWhenCantInstantiateCategory(CreateCategoryInput input, string expectedExceptionMessage)
     {
         var dbContext = _fixture.CreateDbContext();
@@ -108,5 +109,7 @@ public class CreateCategoryTest
         var task = async () => await useCase.Handle(input, CancellationToken.None);   
         
         await task.Should().ThrowAsync<EntityValidationException>().WithMessage(expectedExceptionMessage);
+        var dbCategoriesList = _fixture.CreateDbContext(true).Categories.AsNoTracking().ToList();
+        dbCategoriesList.Should().HaveCount(0);
     }
 }
