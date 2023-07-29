@@ -8,6 +8,7 @@ using FluentAssertions;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 using JG.Flix.Catalog.Application.Exceptions;
+using JG.Flix.Catalog.Domain.Exceptions;
 
 namespace JG.Flix.Catalog.IntegrationTests.Application.UseCases.Category.UpdateCategory;
 
@@ -119,5 +120,24 @@ public class UpdateCategoryTest
         var task = async () => await useCase.Handle(input, CancellationToken.None);
 
         await task.Should().ThrowAsync<NotFoundException>().WithMessage($"Category '{input.Id}' not found.");
+    }
+
+    [Theory(DisplayName = nameof(UpdateCategoryThrowsCantInstantiateCategory))]
+    [Trait("Integration/Application", "UpdateCategory - Use Cases")]
+    [MemberData(nameof(UpdateCategoryTestDataGenerator.GetInvalidInputs), parameters: 6, MemberType = typeof(UpdateCategoryTestDataGenerator))]
+    public async Task UpdateCategoryThrowsCantInstantiateCategory(UpdateCategoryInput input, string expectedExeptionMessage)
+    {
+        var dbContext = _fixture.CreateDbContext();
+        var exampleCategories = _fixture.GetExampleCategoryList(); 
+        await dbContext.AddRangeAsync(exampleCategories);
+        dbContext.SaveChanges();
+        var repository = new CategoryRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+        var useCase = new ApplicationUseCase.UpdateCategory(repository, unitOfWork);
+        input.Id = exampleCategories[0].Id;
+
+        var task = async () => await useCase.Handle(input, CancellationToken.None);
+
+        await task.Should().ThrowAsync<EntityValidationException>().WithMessage(expectedExeptionMessage);
     }
 }
