@@ -44,7 +44,35 @@ public class UpdateCategoryTest
         output.Should().NotBeNull();
         output.Name.Should().Be(input.Name);
         output.Description.Should().Be(input.Description);
-        output.IsActive.Should().Be((bool)input.IsActive!);
-        
+        output.IsActive.Should().Be((bool)input.IsActive!);        
+    }
+
+    [Theory(DisplayName = nameof(UpdateCategoryWhithoutIsActive))]
+    [Trait("Integration/Application", "UpdateCategory - Use Cases")]
+    [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 5, MemberType = typeof(UpdateCategoryTestDataGenerator))]
+    public async Task UpdateCategoryWhithoutIsActive(DomainEntity.Category exampleCategory, UpdateCategoryInput exampleInput)
+    {
+        var input = new UpdateCategoryInput(exampleCategory.Id, exampleCategory.Name, exampleCategory.Description);
+        var dbContext = _fixture.CreateDbContext();
+        await dbContext.AddRangeAsync(_fixture.GetExampleCategoryList());
+        var trackingInfo = await dbContext.AddAsync(exampleCategory);
+        dbContext.SaveChanges();
+        trackingInfo.State = EntityState.Detached;
+        var repository = new CategoryRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+        var useCase = new ApplicationUseCase.UpdateCategory(repository, unitOfWork);
+
+        CategoryModelOutput output = await useCase.Handle(input, CancellationToken.None);
+
+        var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(output.Id);
+        dbCategory.Should().NotBeNull();
+        dbCategory!.Name.Should().Be(input.Name);
+        dbCategory.Description.Should().Be(input.Description);
+        dbCategory.IsActive.Should().Be(exampleCategory.IsActive);
+        output.Should().NotBeNull();
+        output.Name.Should().Be(input.Name);
+        output.Description.Should().Be(input.Description);
+        output.IsActive.Should().Be(exampleCategory.IsActive);
+
     }
 }
