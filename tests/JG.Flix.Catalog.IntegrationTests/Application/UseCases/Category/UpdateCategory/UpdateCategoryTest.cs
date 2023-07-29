@@ -7,6 +7,7 @@ using JG.Flix.Catalog.Infra.Data.EF;
 using FluentAssertions;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
+using JG.Flix.Catalog.Application.Exceptions;
 
 namespace JG.Flix.Catalog.IntegrationTests.Application.UseCases.Category.UpdateCategory;
 
@@ -101,5 +102,22 @@ public class UpdateCategoryTest
         output.Name.Should().Be(input.Name);
         output.Description.Should().Be(exampleCategory.Description);
         output.IsActive.Should().Be(exampleCategory.IsActive);
+    }
+
+    [Fact(DisplayName = nameof(UpdateCategoryThrowsNotFoundCategory))]
+    [Trait("Integration/Application", "UpdateCategory - Use Cases")]
+    public async Task UpdateCategoryThrowsNotFoundCategory()
+    {
+        var input =_fixture.GetValidInput();
+        var dbContext = _fixture.CreateDbContext();
+        await dbContext.AddRangeAsync(_fixture.GetExampleCategoryList());
+        dbContext.SaveChanges();
+        var repository = new CategoryRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+        var useCase = new ApplicationUseCase.UpdateCategory(repository, unitOfWork);
+
+        var task = async () => await useCase.Handle(input, CancellationToken.None);
+
+        await task.Should().ThrowAsync<NotFoundException>().WithMessage($"Category '{input.Id}' not found.");
     }
 }
