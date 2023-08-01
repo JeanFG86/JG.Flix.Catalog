@@ -46,4 +46,23 @@ public class ListCategoriesTest
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
         }
     }
+
+    [Fact(DisplayName = nameof(SearhReturnsEmptyWhenEmpty))]
+    [Trait("Integration/Application", "ListCategories - Use Cases")]
+    public async Task SearhReturnsEmptyWhenEmpty()
+    {
+        FlixCatalogDbContext dbContext = _fixture.CreateDbContext();        
+        var categoryRepository = new CategoryRepository(dbContext);
+        var input = new AppUseCases.ListCategoriesInput(1, 20);
+        var useCase = new AppUseCases.ListCategories(categoryRepository);
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Items.Should().NotBeNull();
+        output.Page.Should().Be(input.Page);
+        output.PerPage.Should().Be(input.PerPage);
+        output.Total.Should().Be(0);
+        output.Items.Should().HaveCount(0);
+    }
 }
