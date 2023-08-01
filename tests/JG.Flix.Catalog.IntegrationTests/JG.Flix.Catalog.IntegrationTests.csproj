@@ -36,4 +36,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\UseCases\Category\ListCategories\" />
+  </ItemGroup>
+
 </Project>
