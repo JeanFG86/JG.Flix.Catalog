@@ -147,4 +147,47 @@ public class ListCategoriesTest
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
         }
     }
+
+    [Theory(DisplayName = nameof(SearhOrdered))]
+    [Trait("Integration/Application", "CategoryRepository - Use Cases")]
+    [InlineData("name", "asc")]
+    [InlineData("name", "desc")]
+    [InlineData("id", "asc")]
+    [InlineData("id", "desc")]
+    [InlineData("createdat", "asc")]
+    [InlineData("createdat", "desc")]
+    public async Task SearhOrdered(string orderBy, string order)
+    {
+        FlixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        var exampleCategoryList = _fixture.GetExampleCategoryList(10);
+        await dbContext.AddRangeAsync(exampleCategoryList);
+        await dbContext.SaveChangesAsync();
+        var categoryRepository = new CategoryRepository(dbContext);
+        var useCaseorder = order == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+        var input = new AppUseCases.ListCategoriesInput(1, 20, "", orderBy, useCaseorder);
+        var useCase = new AppUseCases.ListCategories(categoryRepository);
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        var expectedOrderList = _fixture.CloneCategoriesListOrdered(exampleCategoryList, input.Sort, input.Dir);
+        output.Should().NotBeNull();
+        output.Items.Should().NotBeNull();
+        output.Page.Should().Be(input.Page);
+        output.PerPage.Should().Be(input.PerPage);
+        output.Total.Should().Be(exampleCategoryList.Count);
+        output.Items.Should().HaveCount(exampleCategoryList.Count);
+
+        for (int i = 0; i < expectedOrderList.Count; i++)
+        {
+            var outputItem = output.Items[i];
+            var exampleItem = expectedOrderList[i];
+            exampleItem.Should().NotBeNull();
+            outputItem.Should().NotBeNull();
+            exampleItem.Should().NotBeNull();
+            outputItem!.Name.Should().Be(exampleItem!.Name);
+            outputItem!.Id.Should().Be(exampleItem!.Id);
+            outputItem.Description.Should().Be(exampleItem.Description);
+            outputItem.IsActive.Should().Be(exampleItem.IsActive);
+        }
+    }
 }
