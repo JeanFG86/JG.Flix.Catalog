@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
+using DomainEntity = JG.Flix.Catalog.Domain.Entity;
 
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.CreateCategory;
 
@@ -27,5 +28,12 @@ public class CreateCategoryApiTest
         output.IsActive.Should().Be(input.IsActive);
         output.Id.Should().NotBeEmpty();
         output.CreatedAt.Should().NotBeSameDateAs(default);
+        DomainEntity.Category dbCategory = await _fixture.Persistence.GetById(output.Id);
+        dbCategory.Should().NotBeNull();
+        dbCategory.Name.Should().Be(input.Name);
+        dbCategory.Description.Should().Be(input.Description);
+        dbCategory.IsActive.Should().Be(input.IsActive);
+        dbCategory.Id.Should().NotBeEmpty();
+        dbCategory.CreatedAt.Should().NotBeSameDateAs(default);
     }
 }
