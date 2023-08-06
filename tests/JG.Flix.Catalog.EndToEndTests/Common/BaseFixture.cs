@@ -7,9 +7,17 @@ public abstract class BaseFixture
 {
     public Faker Faker { get; set; }
 
+    public CustomWebApplicationFactory<Program> WebAppFactory { get; set; }
+    public HttpClient HttpClient { get; set; }
     public ApiClient ApiClient { get; set; }
 
-    protected BaseFixture() => Faker = new Faker("pt_BR");
+    protected BaseFixture()
+    {
+        Faker = new Faker("pt_BR");
+        WebAppFactory = new CustomWebApplicationFactory<Program>();
+        HttpClient = WebAppFactory.CreateClient();
+        ApiClient = new ApiClient(HttpClient);
+    }
 
     public FlixCatalogDbContext CreateDbContext()
     {
