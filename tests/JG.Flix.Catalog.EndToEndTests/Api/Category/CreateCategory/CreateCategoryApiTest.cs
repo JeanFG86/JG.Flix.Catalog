@@ -20,7 +20,7 @@ public class CreateCategoryApiTest
     {
         var input =  _fixture.getExampleInput();
 
-        CategoryModelOutput output = await _fixture.Api.Post<CategoryModelOutput>("/categories", input);
+        CategoryModelOutput output = await _fixture.ApiClient.Post<CategoryModelOutput>("/categories", input);
 
         output.Should().NotBeNull();
         output.Name.Should().Be(input.Name);
