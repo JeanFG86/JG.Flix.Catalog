@@ -7,6 +7,8 @@ public abstract class BaseFixture
 {
     public Faker Faker { get; set; }
 
+    public ApiClient ApiClient { get; set; }
+
     protected BaseFixture() => Faker = new Faker("pt_BR");
 
     public FlixCatalogDbContext CreateDbContext()
