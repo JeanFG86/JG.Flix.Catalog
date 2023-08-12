@@ -2,10 +2,12 @@ using Jg.Flix.Catalog.Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
 builder.Services
+    .AddAppConnections()
     .AddUseCases()
     .AddAndConfigureControllers();
+
+var app = builder.Build();
 
 app.UseDocumentation();
 
