@@ -1,10 +1,12 @@
-﻿namespace Jg.Flix.Catalog.Api.Configurations;
+﻿using Jg.Flix.Catalog.Api.Filters;
+
+namespace Jg.Flix.Catalog.Api.Configurations;
 
 public static class ControllersConfig
 {
     public static IServiceCollection AddAndConfigureControllers(this IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers(options => options.Filters.Add(typeof(ApiGlobalExceptionFilter)));
         services.AddDocumentation();
 
         return services;

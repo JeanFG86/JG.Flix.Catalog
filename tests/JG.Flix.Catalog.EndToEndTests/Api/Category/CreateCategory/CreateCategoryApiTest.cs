@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -56,7 +57,7 @@ public class CreateCategoryApiTest
         output.Should().NotBeNull();
         output!.Title.Should().Be("One or more validation errors ocurred");
         output.Type.Should().Be("UnprocessableEntity");
-        output.Status.Should().Be((int)HttpStatusCode.UnprocessableEntity);
+        output.Status.Should().Be((int)StatusCodes.Status422UnprocessableEntity);
         output.Detail.Should().Be(expectedDetail);
     }
 }
