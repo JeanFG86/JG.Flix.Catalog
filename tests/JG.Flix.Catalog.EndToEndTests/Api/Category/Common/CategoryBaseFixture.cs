@@ -1,6 +1,5 @@
-﻿
-using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
-using JG.Flix.Catalog.EndToEndTests.Common;
+﻿using JG.Flix.Catalog.EndToEndTests.Common;
+using DomainEntity = JG.Flix.Catalog.Domain.Entity;
 
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.Common;
 public class CategoryBaseFixture : BaseFixture
@@ -61,4 +60,11 @@ public class CategoryBaseFixture : BaseFixture
         }
         return tooLongDescriptionForCategory;
     }
+
+    public DomainEntity.Category GetExampleCategory() =>
+        new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean());
+
+    public List<DomainEntity.Category> GetExampleCategoriesList(int listLength = 1) =>
+        Enumerable.Range(1, listLength).Select(_ => new DomainEntity.Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandonBoolean())).ToList();
+
 }
