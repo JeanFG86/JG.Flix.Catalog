@@ -27,7 +27,7 @@ public class DeleteCategoryApiTest
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status204NoContent);
-        output.Should().NotBeNull();
+        output.Should().BeNull();
         var persistenceCategory = await _fixture.Persistence.GetById(exampleCategory.Id);
         persistenceCategory.Should().BeNull();
     }
