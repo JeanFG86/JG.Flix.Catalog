@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.DeleteCategory;
@@ -30,5 +31,24 @@ public class DeleteCategoryApiTest
         output.Should().BeNull();
         var persistenceCategory = await _fixture.Persistence.GetById(exampleCategory.Id);
         persistenceCategory.Should().BeNull();
+    }
+
+    [Fact(DisplayName = nameof(ErrorWhenNotFound))]
+    [Trait("EndToEnd/API", "Category/Delete - Endpoints")]
+    public async Task ErrorWhenNotFound()
+    {
+        var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
+        await _fixture.Persistence.InsertList(exampleCategoriesList);
+        var radonGuid = Guid.NewGuid();
+
+        var (response, output) = await _fixture.ApiClient.Delete<ProblemDetails>($"/categories/{radonGuid}");
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status404NotFound);
+        output.Should().NotBeNull();
+        output!.Status.Should().Be((int)StatusCodes.Status404NotFound);
+        output.Title.Should().Be("Not Found");
+        output.Detail.Should().Be($"Category '{radonGuid}' not found.");
+        output.Type.Should().Be($"NotFound");
     }
 }
