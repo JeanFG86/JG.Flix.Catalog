@@ -7,7 +7,7 @@ using System.Net;
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.GetCategory;
 
 [Collection(nameof(GetCategoryApiTestFixture))]
-public class GetCategoryApiTest
+public class GetCategoryApiTest : IDisposable
 {
     private readonly GetCategoryApiTestFixture _fixture;
 
@@ -52,5 +52,10 @@ public class GetCategoryApiTest
         output.Title.Should().Be("Not Found");
         output.Detail.Should().Be($"Category '{radonGuid}' not found.");
         output.Type.Should().Be($"NotFound");
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 }

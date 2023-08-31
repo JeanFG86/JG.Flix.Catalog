@@ -8,7 +8,7 @@ using System.Net;
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.CreateCategory;
 
 [Collection(nameof(CreateCategoryApiTestFixture))]
-public class CreateCategoryApiTest
+public class CreateCategoryApiTest : IDisposable
 {
     private readonly CreateCategoryApiTestFixture _fixture;
 
@@ -40,7 +40,7 @@ public class CreateCategoryApiTest
         dbCategory.IsActive.Should().Be(input.IsActive);
         dbCategory.Id.Should().NotBeEmpty();
         dbCategory.CreatedAt.Should().NotBeSameDateAs(default);
-    }
+    }    
 
     [Theory(DisplayName = nameof(ThrowWhenCantInstantiateAggregate))]
     [Trait("EndToEnd/API", "Category/Create - Endpoints")]
@@ -59,5 +59,10 @@ public class CreateCategoryApiTest
         output.Type.Should().Be("UnprocessableEntity");
         output.Status.Should().Be((int)StatusCodes.Status422UnprocessableEntity);
         output.Detail.Should().Be(expectedDetail);
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 }

@@ -7,7 +7,7 @@ using System.Net;
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.ListCategories;
 
 [Collection(nameof(ListCategoriesApiTestFixture))]
-public class ListCategoriesApiTest
+public class ListCategoriesApiTest : IDisposable
 {
     private readonly ListCategoriesApiTestFixture _fixture;
 
@@ -39,5 +39,10 @@ public class ListCategoriesApiTest
             outputItem.Description.Should().Be(exampleItem.Description);
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
         }        
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 }
