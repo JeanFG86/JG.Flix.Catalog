@@ -2,6 +2,7 @@
 using JG.Flix.Catalog.Application.UseCases.Category.CreateCategory;
 using JG.Flix.Catalog.Application.UseCases.Category.DeleteCategory;
 using JG.Flix.Catalog.Application.UseCases.Category.GetCategory;
+using JG.Flix.Catalog.Application.UseCases.Category.ListCategories;
 using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -56,4 +57,11 @@ public class CategoriesController : ControllerBase
         return Ok(output);
     }
 
+    [HttpGet()]
+    [ProducesResponseType(typeof(CategoryModelOutput), StatusCodes.Status200OK)]
+    public async Task<IActionResult> List([FromQuery] ListCategoriesInput input, CancellationToken cancellationToken)
+    {
+        var output = await _mediator.Send(input, cancellationToken);
+        return Ok(output);
+    }
 }

@@ -24,7 +24,6 @@ public class ListCategoriesApiTest
         var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
         await _fixture.Persistence.InsertList(exampleCategoriesList);
  
-
         var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>($"/categories");
 
         response.Should().NotBeNull();
