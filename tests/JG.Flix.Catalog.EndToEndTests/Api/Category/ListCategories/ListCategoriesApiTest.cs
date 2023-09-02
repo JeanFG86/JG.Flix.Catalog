@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using JG.Flix.Catalog.Application.UseCases.Category.ListCategories;
+using JG.Flix.Catalog.Domain.SeedWork.SearchableRepository;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 
@@ -153,6 +154,47 @@ public class ListCategoriesApiTest : IDisposable
             outputItem.Description.Should().Be(exampleItem.Description);
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
         }
+    }
+
+    [Theory(DisplayName = nameof(SearhOrdered))]
+    [Trait("EndToEnd/API", "Category/List - Endpoints")]
+    [InlineData("name", "asc")]
+    [InlineData("name", "desc")]
+    [InlineData("id", "asc")]
+    [InlineData("id", "desc")]
+    [InlineData("createdat", "asc")]
+    [InlineData("createdat", "desc")]
+    public async Task SearhOrdered(string orderBy, string order)
+    {
+        var exampleCategoriesList = _fixture.GetExampleCategoriesList(10);
+        await _fixture.Persistence.InsertList(exampleCategoriesList);
+        var inputOrder = order == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+        var input = new ListCategoriesInput(1, 20, "", orderBy, inputOrder);
+
+        var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>($"/categories", input);
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+        output.Should().NotBeNull();
+        output!.Total.Should().Be(exampleCategoriesList.Count);
+        output.Page.Should().Be(input.Page);
+        output.PerPage.Should().Be(input.PerPage);
+        output.Items.Should().HaveCount(exampleCategoriesList.Count);
+
+        var expectedOrderList = _fixture.CloneCategoriesListOrdered(exampleCategoriesList, input.Sort, input.Dir);
+        for (int i = 0; i < expectedOrderList.Count; i++)
+        {
+            var outputItem = output.Items[i];
+            var exampleItem = expectedOrderList[i];
+            exampleItem.Should().NotBeNull();
+            outputItem.Should().NotBeNull();
+            exampleItem.Should().NotBeNull();
+            outputItem.Name.Should().Be(exampleItem!.Name);
+            outputItem.Id.Should().Be(exampleItem!.Id);
+            outputItem.Description.Should().Be(exampleItem.Description);
+            outputItem.IsActive.Should().Be(exampleItem.IsActive);
+        }
+
     }
 
     public void Dispose()
