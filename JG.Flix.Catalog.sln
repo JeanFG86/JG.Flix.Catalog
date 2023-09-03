@@ -19,7 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JG.Flix.Catalog.Infra.Data.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JG.Flix.Catalog.EndToEndTests", "tests\JG.Flix.Catalog.EndToEndTests\JG.Flix.Catalog.EndToEndTests.csproj", "{D395D50B-5E98-4C50-99BB-003B3F084E4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jg.Flix.Catalog.Api", "src\Jg.Flix.Catalog.Api\Jg.Flix.Catalog.Api.csproj", "{229708AE-0A28-4652-80DE-84E21179693F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jg.Flix.Catalog.Api", "src\Jg.Flix.Catalog.Api\Jg.Flix.Catalog.Api.csproj", "{229708AE-0A28-4652-80DE-84E21179693F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "env", "env", "{FE2F9A68-6696-4E1E-B976-1541C5056A47}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
