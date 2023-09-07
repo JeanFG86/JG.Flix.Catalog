@@ -3,7 +3,7 @@ using Jg.Flix.Catalog.Api.Configurations;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddAppConnections()
+    .AddAppConnections(builder.Configuration)
     .AddUseCases()
     .AddAndConfigureControllers();
 

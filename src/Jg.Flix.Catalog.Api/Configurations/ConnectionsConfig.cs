@@ -5,16 +5,17 @@ namespace Jg.Flix.Catalog.Api.Configurations;
 
 public static class ConnectionsConfig
 {
-    public static IServiceCollection AddAppConnections(this IServiceCollection services)
+    public static IServiceCollection AddAppConnections(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbConnection();
+        services.AddDbConnection(configuration);
         return services;
     }
 
-    private static IServiceCollection AddDbConnection(this IServiceCollection services)
+    private static IServiceCollection AddDbConnection(this IServiceCollection services, IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("CatalogDb");
         services.AddDbContext<FlixCatalogDbContext>(
-                options => options.UseInMemoryDatabase("InMemory-DSV-Database")
+                options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
             );
         return services;
     }
