@@ -2,6 +2,7 @@
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using JG.Flix.Catalog.Application.UseCases.Category.ListCategories;
 using JG.Flix.Catalog.Domain.SeedWork.SearchableRepository;
+using JG.Flix.Catalog.EndToEndTests.Extensions.DateTime;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 
@@ -193,6 +194,7 @@ public class ListCategoriesApiTest : IDisposable
             outputItem.Id.Should().Be(exampleItem!.Id);
             outputItem.Description.Should().Be(exampleItem.Description);
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
+            outputItem.CreatedAt.TrimMillisseconds().Should().Be(exampleItem.CreatedAt.TrimMillisseconds());
         }
 
     }
