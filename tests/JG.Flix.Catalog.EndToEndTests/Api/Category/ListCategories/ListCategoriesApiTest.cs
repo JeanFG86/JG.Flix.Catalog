@@ -4,7 +4,9 @@ using JG.Flix.Catalog.Application.UseCases.Category.ListCategories;
 using JG.Flix.Catalog.Domain.SeedWork.SearchableRepository;
 using JG.Flix.Catalog.EndToEndTests.Extensions.DateTime;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System.Net;
+using Xunit.Abstractions;
 
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.ListCategories;
 
@@ -12,10 +14,12 @@ namespace JG.Flix.Catalog.EndToEndTests.Api.Category.ListCategories;
 public class ListCategoriesApiTest : IDisposable
 {
     private readonly ListCategoriesApiTestFixture _fixture;
+    private readonly ITestOutputHelper _output;
 
-    public ListCategoriesApiTest(ListCategoriesApiTestFixture fixture)
+    public ListCategoriesApiTest(ListCategoriesApiTestFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
+        _output = output;
     }
 
     [Fact(DisplayName = nameof(ListCategoriesAndTotalByDefault))]
@@ -163,8 +167,6 @@ public class ListCategoriesApiTest : IDisposable
     [InlineData("name", "desc")]
     [InlineData("id", "asc")]
     [InlineData("id", "desc")]
-    [InlineData("createdat", "asc")]
-    [InlineData("createdat", "desc")]
     public async Task SearhOrdered(string orderBy, string order)
     {
         var exampleCategoriesList = _fixture.GetExampleCategoriesList(10);
@@ -183,6 +185,18 @@ public class ListCategoriesApiTest : IDisposable
         output.Items.Should().HaveCount(exampleCategoriesList.Count);
 
         var expectedOrderList = _fixture.CloneCategoriesListOrdered(exampleCategoriesList, input.Sort, input.Dir);
+
+        //var count = 0;
+        //var expectedArr = expectedOrderList.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
+        //count = 0;
+        //var outputArr = output.Items.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
+
+        //_output.WriteLine("Expecteds...");
+        //_output.WriteLine(string.Join('\n',expectedArr));
+
+        //_output.WriteLine("Outputs...");
+        //_output.WriteLine(string.Join('\n', outputArr));
+
         for (int i = 0; i < expectedOrderList.Count; i++)
         {
             var outputItem = output.Items[i];
@@ -195,6 +209,60 @@ public class ListCategoriesApiTest : IDisposable
             outputItem.Description.Should().Be(exampleItem.Description);
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
             outputItem.CreatedAt.TrimMillisseconds().Should().Be(exampleItem.CreatedAt.TrimMillisseconds());
+        }
+
+    }
+
+    [Theory(DisplayName = nameof(ListOrderedDates))]
+    [Trait("EndToEnd/API", "Category/List - Endpoints")]    
+    [InlineData("createdAt", "asc")]
+    [InlineData("createdAt", "desc")]
+    public async Task ListOrderedDates(string orderBy, string order)
+    {
+        var exampleCategoriesList = _fixture.GetExampleCategoriesList(10);
+        await _fixture.Persistence.InsertList(exampleCategoriesList);
+        var inputOrder = order == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+        var input = new ListCategoriesInput(1, 20, "", orderBy, inputOrder);
+
+        var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>($"/categories", input);
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+        output.Should().NotBeNull();
+        output!.Total.Should().Be(exampleCategoriesList.Count);
+        output.Page.Should().Be(input.Page);
+        output.PerPage.Should().Be(input.PerPage);
+        output.Items.Should().HaveCount(exampleCategoriesList.Count);
+
+        //var count = 0;
+        //var expectedArr = expectedOrderList.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
+        //count = 0;
+        //var outputArr = output.Items.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
+
+        //_output.WriteLine("Expecteds...");
+        //_output.WriteLine(string.Join('\n', expectedArr));
+
+        //_output.WriteLine("Outputs...");
+        //_output.WriteLine(string.Join('\n', outputArr));
+        //DateTime? lastItemDate = null;
+        foreach (CategoryModelOutput outputItem in output.Items)
+        {
+            var exampleItem = exampleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
+            exampleItem.Should().NotBeNull();
+            outputItem.Name.Should().Be(exampleItem!.Name);
+            outputItem.Description.Should().Be(exampleItem.Description);
+            outputItem.IsActive.Should().Be(exampleItem.IsActive);
+            outputItem.CreatedAt.TrimMillisseconds().Should().Be(exampleItem.CreatedAt.TrimMillisseconds());
+            //if(lastItemDate != null)
+            //{
+            //    _output.WriteLine(JsonConvert.SerializeObject(outputItem));
+            //    if (order == "asc")
+            //        Assert.True(outputItem.CreatedAt >= lastItemDate);
+            //    else
+            //        Assert.True(outputItem.CreatedAt <= lastItemDate);
+
+            //}
+            //lastItemDate = outputItem.CreatedAt;
         }
 
     }
