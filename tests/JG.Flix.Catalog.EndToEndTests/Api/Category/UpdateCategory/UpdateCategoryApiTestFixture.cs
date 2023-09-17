@@ -1,4 +1,5 @@
-﻿using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
+﻿using Jg.Flix.Catalog.Api.ApiModels.Category;
+using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 using JG.Flix.Catalog.EndToEndTests.Api.Category.Common;
 
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.UpdateCategory;
@@ -9,8 +10,7 @@ public class UpdateCategoryApiTestFixtureCollection : ICollectionFixture<UpdateC
 
 public class UpdateCategoryApiTestFixture : CategoryBaseFixture
 {
-    public UpdateCategoryInput GetExampleInput(Guid? id = null) => new(
-            id ?? Guid.NewGuid(),
+    public UpdateCategoryApiInput GetExampleInput() => new(
             GetValidCategoryName(),
             GetValidCategoryDescription(),
             GetRandonBoolean()
