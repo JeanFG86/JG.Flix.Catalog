@@ -7,6 +7,22 @@ using System.Net;
 
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.UpdateCategory;
 
+
+
+public class ApiTemInput
+{
+    public ApiTemInput(string name, string? description = null, bool? isActive = null)
+    {
+        Name = name;
+        Description = description;
+        IsActive = isActive;
+    }
+
+    public string Name { get; set; }
+    public string? Description { get; set; }
+    public bool? IsActive { get; set; }
+}
+
 [Collection(nameof(UpdateCategoryApiTestFixture))]
 public class UpdateCategoryApiTest : IDisposable
 {
@@ -26,7 +42,7 @@ public class UpdateCategoryApiTest : IDisposable
         var exampleCategory = exampleCategoriesList[10];
         var input = _fixture.GetExampleInput(exampleCategory.Id);
 
-        var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>($"/categories/{exampleCategory.Id}", input);
+        var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>($"/categories/{exampleCategory.Id}", new ApiTemInput(input.Name, input.Description, input.IsActive));
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be((HttpStatusCode) StatusCodes.Status200OK);
