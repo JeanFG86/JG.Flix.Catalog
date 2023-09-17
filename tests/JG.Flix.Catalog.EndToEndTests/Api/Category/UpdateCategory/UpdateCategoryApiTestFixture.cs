@@ -1,5 +1,4 @@
 ﻿using Jg.Flix.Catalog.Api.ApiModels.Category;
-using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 using JG.Flix.Catalog.EndToEndTests.Api.Category.Common;
 
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.UpdateCategory;

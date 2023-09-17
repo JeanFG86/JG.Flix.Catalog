@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Jg.Flix.Catalog.Api.ApiModels.Category;
 using JG.Flix.Catalog.Application.UseCases.Category.Common;
-using JG.Flix.Catalog.Application.UseCases.Category.UpdateCategory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
