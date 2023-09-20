@@ -67,7 +67,7 @@ public class CategoriesController : ControllerBase
         [FromQuery] int? perPage = null,
         [FromQuery] string? search = null,
         [FromQuery] string? sort = null,
-        [FromQuery] SearchOrder? dir = null        )
+        [FromQuery] SearchOrder? dir = null)
     {
         var input = new ListCategoriesInput();
         if(page != null)        
