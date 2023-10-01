@@ -8,7 +8,12 @@ namespace JG.Flix.Catalog.EndToEndTests.Api.Category.GetCategory;
 
 class GetCategoryResponse
 {
-    public CategoryModelOutput Data { get; }
+    public GetCategoryResponse(CategoryModelOutput data)
+    {
+        Data = data;
+    }
+
+    public CategoryModelOutput Data { get; set; }
 }
 
 [Collection(nameof(GetCategoryApiTestFixture))]
