@@ -87,7 +87,6 @@ public class CategoriesController : ControllerBase
             input.Dir = dir.Value;
 
         var output = await _mediator.Send(input, cancellationToken);
-        var response = new ApiResponseList<CategoryModelOutput>(output.Page, output.PerPage, output.Total, output.Items);
-        return Ok(response);
+        return Ok(new ApiResponseList<CategoryModelOutput>(output));
     }
 }
