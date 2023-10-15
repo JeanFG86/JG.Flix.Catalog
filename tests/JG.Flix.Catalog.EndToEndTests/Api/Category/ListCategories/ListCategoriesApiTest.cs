@@ -3,25 +3,13 @@ using JG.Flix.Catalog.Application.UseCases.Category.Common;
 using JG.Flix.Catalog.Application.UseCases.Category.ListCategories;
 using JG.Flix.Catalog.Domain.SeedWork.SearchableRepository;
 using JG.Flix.Catalog.EndToEndTests.Extensions.DateTime;
+using JG.Flix.Catalog.EndToEndTests.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Net;
 using Xunit.Abstractions;
 
 namespace JG.Flix.Catalog.EndToEndTests.Api.Category.ListCategories;
-
-
-class CategoryListOutput
-{
-    public CategoryListOutput(Meta meta, IReadOnlyList<CategoryModelOutput> data)
-    {
-        Meta = meta;
-        Data = data;
-    }
-
-    public Meta Meta { get; set; }
-    public IReadOnlyList<CategoryModelOutput> Data { get; set; }
-}
 
 public class Meta
 {
@@ -58,18 +46,18 @@ public class ListCategoriesApiTest : IDisposable
         var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
         await _fixture.Persistence.InsertList(exampleCategoriesList);
  
-        var (response, output) = await _fixture.ApiClient.Get<CategoryListOutput>($"/categories");
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories");
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
         output.Should().NotBeNull();
         output!.Data.Should().NotBeNull();
         output.Meta.Should().NotBeNull();
-        output!.Meta.Total.Should().Be(exampleCategoriesList.Count);
+        output.Meta!.Total.Should().Be(exampleCategoriesList.Count);
         output.Meta.CurrentPage.Should().Be(1);
         output.Meta.PerPage.Should().Be(defaultPerPage);
         output!.Data.Should().HaveCount(defaultPerPage);
-        foreach (CategoryModelOutput outputItem in output.Data)
+        foreach (CategoryModelOutput outputItem in output.Data!)
         {
             var exampleItem = exampleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
             exampleItem.Should().NotBeNull();
