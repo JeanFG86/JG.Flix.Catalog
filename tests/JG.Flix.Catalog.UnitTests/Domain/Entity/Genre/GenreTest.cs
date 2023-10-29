@@ -33,7 +33,7 @@ public class GenreTest
         genre.IsActive.Should().BeTrue();
     }
 
-    [Theory(DisplayName = nameof(Instantiate))]
+    [Theory(DisplayName = nameof(InstantiateWithIsActive))]
     [Trait("Domain", "Genre - Aggregates")]
     [InlineData(true)]
     [InlineData(false)]
@@ -55,7 +55,7 @@ public class GenreTest
 
     }
 
-    [Theory(DisplayName = nameof(Instantiate))]
+    [Theory(DisplayName = nameof(Activate))]
     [Trait("Domain", "Genre - Aggregates")]
     [InlineData(true)]
     [InlineData(false)]
@@ -71,6 +71,25 @@ public class GenreTest
         genre.Id.Should().NotBeEmpty();
         genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
         genre.IsActive.Should().BeTrue();
+
+    }
+
+    [Theory(DisplayName = nameof(Deactivate))]
+    [Trait("Domain", "Genre - Aggregates")]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void Deactivate(bool isActive)
+    {
+        var genreName = _fixture.GetValidName();
+        var genre = new DomainEntity.Genre(genreName, isActive);
+
+        genre.Deactivate();
+
+        genre.Should().NotBeNull();
+        genre.Name.Should().Be(genreName);
+        genre.Id.Should().NotBeEmpty();
+        genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+        genre.IsActive.Should().BeFalse();
 
     }
 
