@@ -61,13 +61,12 @@ public class GenreTest
     [InlineData(false)]
     public void Activate(bool isActive)
     {
-        var genreName = _fixture.GetValidName();
-        var genre = new DomainEntity.Genre(genreName, isActive);
+        var genre = _fixture.GetExampleGenre(isActive);
 
         genre.Activate();
       
         genre.Should().NotBeNull();
-        genre.Name.Should().Be(genreName);
+        genre.Name.Should().Be(genre.Name);
         genre.Id.Should().NotBeEmpty();
         genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
         genre.IsActive.Should().BeTrue();
@@ -80,13 +79,12 @@ public class GenreTest
     [InlineData(false)]
     public void Deactivate(bool isActive)
     {
-        var genreName = _fixture.GetValidName();
-        var genre = new DomainEntity.Genre(genreName, isActive);
+        var genre = _fixture.GetExampleGenre(isActive);
 
         genre.Deactivate();
 
         genre.Should().NotBeNull();
-        genre.Name.Should().Be(genreName);
+        genre.Name.Should().Be(genre.Name);
         genre.Id.Should().NotBeEmpty();
         genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
         genre.IsActive.Should().BeFalse();
