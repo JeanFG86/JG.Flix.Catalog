@@ -55,4 +55,23 @@ public class GenreTest
 
     }
 
+    [Theory(DisplayName = nameof(Instantiate))]
+    [Trait("Domain", "Genre - Aggregates")]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void Activate(bool isActive)
+    {
+        var genreName = _fixture.GetValidName();
+        var genre = new DomainEntity.Genre(genreName, isActive);
+
+        genre.Activate();
+      
+        genre.Should().NotBeNull();
+        genre.Name.Should().Be(genreName);
+        genre.Id.Should().NotBeEmpty();
+        genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+        genre.IsActive.Should().BeTrue();
+
+    }
+
 }

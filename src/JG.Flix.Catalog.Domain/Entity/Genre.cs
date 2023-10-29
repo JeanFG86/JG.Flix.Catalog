@@ -14,4 +14,6 @@ public class Genre: AggregateRoot
         IsActive = isActive;
         CreatedAt = DateTime.Now;
     }
+
+    public void Activate() => IsActive = true;
 }
