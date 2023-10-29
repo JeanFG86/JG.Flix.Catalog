@@ -66,7 +66,6 @@ public class GenreTest
         genre.Activate();
       
         genre.Should().NotBeNull();
-        genre.Name.Should().Be(genre.Name);
         genre.Id.Should().NotBeEmpty();
         genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
         genre.IsActive.Should().BeTrue();
@@ -84,11 +83,26 @@ public class GenreTest
         genre.Deactivate();
 
         genre.Should().NotBeNull();
-        genre.Name.Should().Be(genre.Name);
         genre.Id.Should().NotBeEmpty();
         genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
         genre.IsActive.Should().BeFalse();
 
     }
 
+    [Fact(DisplayName = nameof(Update))]
+    [Trait("Domain", "Genre - Aggregates")]
+    public void Update()
+    {
+        var genre = _fixture.GetExampleGenre();
+        var newName = _fixture.GetValidName();
+        var oldIsActive = genre.IsActive;
+
+        genre.Update(newName);
+
+        genre.Should().NotBeNull();
+        genre.Name.Should().Be(newName);
+        genre.Id.Should().NotBeEmpty();
+        genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+        genre.IsActive.Should().Be(oldIsActive);
+    }
 }
