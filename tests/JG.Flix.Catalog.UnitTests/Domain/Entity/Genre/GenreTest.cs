@@ -7,11 +7,18 @@ namespace JG.Flix.Catalog.UnitTests.Domain.Entity.Genre;
 [Collection(nameof(GenreTestFixture))]
 public class GenreTest
 {
+    private readonly GenreTestFixture _fixture;
+
+    public GenreTest(GenreTestFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     [Fact(DisplayName =nameof(Instantiate))]
     [Trait("Domain", "Genre - Aggregates")]
     public void Instantiate()
     {
-        var genreName = "Horror";
+        var genreName = _fixture.GetValidName();
         var datetimeBefore = DateTime.Now;
         var datetimeAfter = DateTime.Now.AddSeconds(1);
 
@@ -32,7 +39,7 @@ public class GenreTest
     [InlineData(false)]
     public void InstantiateWithIsActive(bool isActive)
     {
-        var genreName = "Horror";
+        var genreName = _fixture.GetValidName();
         var datetimeBefore = DateTime.Now;
         var datetimeAfter = DateTime.Now.AddSeconds(1);
 
