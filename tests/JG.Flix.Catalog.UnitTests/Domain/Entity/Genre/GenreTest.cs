@@ -2,6 +2,7 @@
 using FluentAssertions;
 using DomainEntity = JG.Flix.Catalog.Domain.Entity;
 using JG.Flix.Catalog.Domain.Exceptions;
+using System;
 
 namespace JG.Flix.Catalog.UnitTests.Domain.Entity.Genre;
 
@@ -117,5 +118,19 @@ public class GenreTest
         genre.Id.Should().NotBeEmpty();
         genre.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
         genre.IsActive.Should().Be(oldIsActive);
+    }
+
+    [Theory(DisplayName = nameof(UpdateThrowWhenNameEmpty))]
+    [Trait("Domain", "Genre - Aggregates")]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData(null)]
+    public void UpdateThrowWhenNameEmpty(string? name)
+    {
+        var genre = _fixture.GetExampleGenre();
+
+        var action = () => genre.Update(name!);
+
+        action.Should().Throw<EntityValidationException>().WithMessage("Name should not be empty or null");
     }
 }
