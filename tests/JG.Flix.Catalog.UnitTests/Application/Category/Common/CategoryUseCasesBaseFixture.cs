@@ -27,9 +27,7 @@ public abstract class CategoryUseCasesBaseFixture : BaseFixture
             categoryDescription = categoryDescription[..10_000];
 
         return categoryDescription;
-    }
-
-    public bool GetRandonBoolean() => new Random().NextDouble() < 0.5;
+    }    
 
     public Mock<ICategoryRepository> GetRepositoryMock() => new();
     public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
