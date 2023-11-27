@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Moq;
 using Xunit;
-
 using DomainEntity = JG.Flix.Catalog.Domain.Entity;
+using UseCase = JG.Flix.Catalog.Application.UseCases.Genre.CreateGenre;
 
 namespace JG.Flix.Catalog.UnitTests.Application.Genre.CreateGenre;
 
@@ -22,7 +22,7 @@ public class CreateGenreTest
     {        
         var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
-        var useCase = new CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object);
+        var useCase = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object);
         var input = _fixture.GetExampleInput();
         var datetimeBefore = DateTime.Now;
 
@@ -41,5 +41,12 @@ public class CreateGenreTest
             Times.Once);
 
         output.Should().NotBeNull();
+        output.Name.Should().Be(input.Name);
+        output.IsActive.Should().Be(input.IsActive);
+        output.Id.Should().NotBeEmpty();
+        output.Categories.Should().HaveCount(0);
+        output.CreatedAt.Should().NotBeSameDateAs(default);
+        (output.CreatedAt >= datetimeBefore).Should().BeTrue();
+        (output.CreatedAt <= datetimeAfter).Should().BeTrue();
     }
 }
