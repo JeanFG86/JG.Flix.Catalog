@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DomainEntity = JG.Flix.Catalog.Domain.Entity;
 
 namespace JG.Flix.Catalog.Application.UseCases.Genre.Common;
 public class GenreModelOutput
@@ -21,4 +17,6 @@ public class GenreModelOutput
         CreatedAt = createdAt;
         Categories = categories;
     }
+
+    public static GenreModelOutput FromGenre(DomainEntity.Genre genre) => new GenreModelOutput(genre.Id, genre.Name, genre.IsActive, genre.CreatedAt, genre.Categories);
 }

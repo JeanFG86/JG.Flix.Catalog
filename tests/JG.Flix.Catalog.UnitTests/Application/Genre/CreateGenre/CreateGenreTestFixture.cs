@@ -14,7 +14,13 @@ public class CreateGenreTestFixture : GenreUseCasesBaseFixture
 {
     public CreateGenreInput GetExampleInput() 
         => new CreateGenreInput(GetValidGenreName(), GetRandonBoolean());
-    
+
+    public CreateGenreInput GetExampleInputWithCategories()
+    {
+        var numberOfCategoriesIds = new Random().Next(1,10);
+        var categoriesIds = Enumerable.Range(1, numberOfCategoriesIds).Select(_ => Guid.NewGuid()).ToList();
+        return new CreateGenreInput(GetValidGenreName(), GetRandonBoolean(), categoriesIds);
+    }
 
     public Mock<IGenreRepository> GetGenreRepositoryMock()
         => new();
