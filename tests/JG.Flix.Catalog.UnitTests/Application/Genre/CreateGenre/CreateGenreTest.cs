@@ -22,7 +22,8 @@ public class CreateGenreTest
     {        
         var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
-        var useCase = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object);
+        var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
+        var useCase = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object, categoryRepositoryMock.Object);
         var input = _fixture.GetExampleInput();
         var datetimeBefore = DateTime.Now;
 
@@ -51,12 +52,13 @@ public class CreateGenreTest
     }
 
     [Fact(DisplayName = nameof(CreateWithRelatedCategories))]
-    [Trait("Application", "CreateWithRelatedCategories - Use Cases")]
+    [Trait("Application", "CreateGenre - Use Cases")]
     public async Task CreateWithRelatedCategories()
     {
         var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
-        var useCase = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object);
+        var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
+        var useCase = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object, categoryRepositoryMock.Object);
         var input = _fixture.GetExampleInputWithCategories();
 
         var output = await useCase.Handle(input, CancellationToken.None);

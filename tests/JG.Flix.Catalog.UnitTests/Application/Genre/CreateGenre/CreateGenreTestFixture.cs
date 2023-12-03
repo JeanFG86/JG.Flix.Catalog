@@ -26,5 +26,8 @@ public class CreateGenreTestFixture : GenreUseCasesBaseFixture
         => new();
 
     public Mock<IUnitOfWork> GetUnitOfWorkMock()
-    => new();
+        => new();
+
+    public Mock<ICategoryRepository> GetCategoryRepositoryMock() 
+        => new();
 }

@@ -8,11 +8,13 @@ public class CreateGenre : ICreateGenre
 {
     private readonly IGenreRepository _genreRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public CreateGenre(IGenreRepository genreRepository, IUnitOfWork unitOfWork)
+    public CreateGenre(IGenreRepository genreRepository, IUnitOfWork unitOfWork, ICategoryRepository categoryRepository)
     {
         _genreRepository = genreRepository;
         _unitOfWork = unitOfWork;
+        _categoryRepository = categoryRepository;
     }
     public async Task<GenreModelOutput> Handle(CreateGenreInput request, CancellationToken cancellationToken)
     {
