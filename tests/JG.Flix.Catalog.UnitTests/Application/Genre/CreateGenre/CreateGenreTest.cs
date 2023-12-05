@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using JG.Flix.Catalog.Application.Exceptions;
 using Moq;
 using Xunit;
 using DomainEntity = JG.Flix.Catalog.Domain.Entity;
@@ -92,12 +93,13 @@ public class CreateGenreTest
         var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
         var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
-        categoryRepositoryMock.Setup(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>())).ReturnsAsync((IReadOnlyList<Guid>)input.CategoriesIds.FindAll(x => x != exampleGuid));
+        categoryRepositoryMock.Setup(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((IReadOnlyList<Guid>)input.CategoriesIds.FindAll(x => x != exampleGuid));
         var useCase = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object, categoryRepositoryMock.Object);      
 
         var action = async () => await useCase.Handle(input, CancellationToken.None);
 
-        await action.Should().ThrowAsync<Exception>().WithMessage($"Related Categories Ids not found: '{exampleGuid}'");
+        await action.Should().ThrowAsync<RelatedAggregateException>().WithMessage($"Related category id not found: {exampleGuid}");
 
         categoryRepositoryMock.Verify(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()), Times.Once);
     }
