@@ -68,4 +68,9 @@ public class CategoryRepository : ICategoryRepository
 
         return orderedQuery;
     }
+
+    public Task<IReadOnlyList<Guid>> GetIdsListByIds(List<Guid> ids, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
