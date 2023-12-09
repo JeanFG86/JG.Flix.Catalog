@@ -20,7 +20,7 @@ public class CreateGenre : ICreateGenre
     public async Task<GenreModelOutput> Handle(CreateGenreInput request, CancellationToken cancellationToken)
     {
         var genre = new DomainEntity.Genre(request.Name, request.IsActive);
-        if(request.CategoriesIds is not null)
+        if((request.CategoriesIds?.Count ?? 0) > 0)
         {
            await ValidateCategoriesIds(request, cancellationToken);
            request.CategoriesIds.ForEach(genre.AddCategory);        
